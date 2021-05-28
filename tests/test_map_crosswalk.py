@@ -81,32 +81,33 @@ def test_norm_pub_date_text(arg, expectation):
         ("Minnesota -- Maps", ["a", "Minnesota", "v", "Maps."]),
         ("Minnesota-Maps", ["a", "Minnesota", "v", "Maps."]),
         ("Minnesota--Maps", ["a", "Minnesota", "v", "Maps."]),
-        # ("Chicago (Ill.) - Guidebooks", ["a", "Chicago (Ill.)", "v", "Guidebooks."])(
-        #     "Klondike River Valley (Yukon) - Gold discoveries - Maps.",
-        #     [
-        #         "a",
-        #         "Klondike River Valley (Yukon)",
-        #         "x",
-        #         "Gold discoveries",
-        #         "v",
-        #         "Maps.",
-        #     ],
-        # ),
-        # ("United States", ["a", "United States."]),
-        # ("United States - Maps", ["a", "United States", "v", "Maps."]),
-        # (
-        #     "United States -- History -- Civil War, 1861-1865 -- Maps.",
-        #     [
-        #         "a",
-        #         "United States",
-        #         "x",
-        #         "History",
-        #         "y",
-        #         "Civil War, 1861-1865",
-        #         "v",
-        #         "Maps.",
-        #     ],
-        # ),
+        ("Chicago (Ill.) - Guidebooks", ["a", "Chicago (Ill.)", "v", "Guidebooks."]),
+        (
+            "Klondike River Valley (Yukon) - Gold discoveries - Maps.",
+            [
+                "a",
+                "Klondike River Valley (Yukon)",
+                "x",
+                "Gold discoveries",
+                "v",
+                "Maps.",
+            ],
+        ),
+        ("United States", ["a", "United States."]),
+        ("United States - Maps", ["a", "United States", "v", "Maps."]),
+        (
+            "United States -- History -- Civil War, 1861-1865 -- Maps.",
+            [
+                "a",
+                "United States",
+                "x",
+                "History",
+                "y",
+                "Civil War, 1861-1865",
+                "v",
+                "Maps.",
+            ],
+        ),
     ],
 )
 def test_construct_geo_subject_subfields(arg, expectation):
@@ -121,6 +122,7 @@ def test_construct_geo_subject_subfields(arg, expectation):
         ("foo -bar", False),
         ("foo- bar", False),
         ("foo--bar", False),
+        ("foo.-bar", True),
     ],
 )
 def test_has_true_hyphen(arg, expectation):
@@ -130,10 +132,11 @@ def test_has_true_hyphen(arg, expectation):
 @pytest.mark.parametrize(
     "arg,expectation",
     [
-        ("foo - bar", "foo--bar"),
-        ("foo -- bar", "foo--bar"),
-        ("foo -bar", "foo--bar"),
-        ("foo- bar", "foo--bar"),
+        ("foo - bar", "foo -- bar"),
+        ("foo -- bar", "foo -- bar"),
+        ("foo -bar", "foo --bar"),
+        ("foo- bar", "foo-- bar"),
+        ("foo-bar", "foo--bar"),
     ],
 )
 def test_norm_subfield_separator(arg, expectation):
@@ -144,7 +147,7 @@ def test_norm_subfield_separator(arg, expectation):
     "arg,expectation",
     [
         ("foo - bar - spam", ["foo", "bar", "spam"]),
-        ("foo -- bar -- spam", ["foo", "bar", "spam"]),
+        (" foo -- bar -- spam ", ["foo", "bar", "spam"]),
     ],
 )
 def test_split_subject_elements(arg, expectation):

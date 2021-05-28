@@ -89,7 +89,10 @@ def norm_pub_date_text(pub_date):
 def has_true_hyphen(s):
     m = TRUE_HYPEN_PATTERN.match(s)
     if m:
-        return True
+        if "--" in s:
+            return False
+        else:
+            return True
     else:
         return False
 
@@ -99,13 +102,10 @@ def norm_subfield_separator(s):
     ' - ' hypen is usually used as a separator, but there are variations
     """
     if has_true_hyphen(s):
-        warnings.warn(f"s", SuspiciousDataWarning)
+        warnings.warn(f"{s}", SuspiciousDataWarning)
 
-    s = (
-        s.replace(" - ", "--")
-        .replace(" -", "--")
-        .replace("- ", "--")
-        .replace("----", "--")
+    s = s.replace("-", "--").replace(
+        "----", "--"
     )  # but not "-" as this might be a valid hyphen
     return s
 
@@ -114,26 +114,53 @@ def split_subject_elements(s):
     """
     normalizes variation of separating subfields during data entry
     """
-    s = norm_separator(s)
+    s = norm_subfield_separator(s)
     data = s.split("--")
     return [e.strip() for e in data]
 
 
+def is_topical_subdivision(sub):
+    found = False
+    topical = ["history", "discoveries"]
+    for s in topical:
+        if s in sub.lower():
+            found = True
+            break
+    return found
+
+
+def is_time_subdivision(sub):
+    found = False
+    period = ["war"]
+    for s in period:
+        if s in sub.lower():
+            found = True
+            break
+    return found
+
+
 def construct_geo_subject_subfields(s):
-    elems = s.strip().split(" - ")
-    subA = elems[0].strip()
-    subV = elems[-1].strip()
+    """
+    Generates subject subfields for 651 tag as a pymarc list
+    """
+    elems = split_subject_elements(s)
+    subA = elems[0]
+    subV = elems[-1]
     if len(elems) > 2:
-        subZs = elems[1:-1]
-        subZs = [s.strip() for s in subZs]
+        other_subs = elems[1:-1]
     else:
-        subZs = []
+        other_subs = []
 
     subfields = []
     subfields.extend(["a", subA])
-    if subZs:
-        for subZ in subZs:
-            subfields.extend(["z", subZ])
+    if other_subs:
+        for sub in other_subs:
+            if is_topical_subdivision(sub):
+                subfields.extend(["x", sub])
+            elif is_time_subdivision(sub):
+                subfields.extend(["y", sub])
+            else:
+                subfields.extend(["z", sub])
     subfields.extend(["v", f"{subV}."])
     return subfields
 
@@ -167,12 +194,7 @@ def make_bib(row: namedtuple, sequence: int):
 
     # 007 tag
 
-    tags.append(
-        Field(
-            tag="007",
-            data="aj canzn",
-        )
-    )
+    tags.append(Field(tag="007", data="aj canzn",))
 
     # 008 tag
     dateCreated = date.strftime(date.today(), "%y%m%d")
