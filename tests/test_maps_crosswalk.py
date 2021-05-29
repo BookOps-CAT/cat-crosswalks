@@ -2,8 +2,9 @@ import pytest
 
 
 from src.maps_crosswalk import (
-    construct_geo_subject_subfields,
+    construct_subject_subfields,
     determine_control_number_sequence,
+    encode_pub_date,
     encode_scale,
     has_invalid_last_chr,
     has_true_hyphen,
@@ -11,7 +12,6 @@ from src.maps_crosswalk import (
     norm_scale_text,
     norm_pub_date_text,
     norm_subfield_separator,
-    encode_pub_date,
     split_subject_elements,
 )
 
@@ -112,8 +112,8 @@ def test_norm_pub_date_text(arg, expectation):
         ),
     ],
 )
-def test_construct_geo_subject_subfields(arg, expectation):
-    assert construct_geo_subject_subfields(arg) == expectation
+def test_construct_subject_subfields(arg, expectation):
+    assert construct_subject_subfields(arg) == expectation
 
 
 @pytest.mark.parametrize(
@@ -181,7 +181,3 @@ def test_has_invalid_last_chr(arg, expectation):
 )
 def test_norm_last_subfield(arg, expectation):
     assert norm_last_subfield(arg) == expectation
-
-
-def test_temp():
-    assert construct_geo_subject_subfields("United States") == ["a", "United States."]

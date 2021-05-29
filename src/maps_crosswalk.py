@@ -154,9 +154,10 @@ def norm_last_subfield(sub):
     return f"{sub}."
 
 
-def construct_geo_subject_subfields(s):
+def construct_subject_subfields(s):
     """
     Generates subject subfields for 651 tag as a pymarc list
+
     """
     elems = split_subject_elements(s)
 
@@ -189,18 +190,11 @@ def construct_geo_subject_subfields(s):
     return subfields
 
 
-def construct_topical_subject_subfields(s):
-    """
-    Creates list of subfield for 650 tag
-    """
-    pass
-
-
 def encode_subjects(sub_str):
     fields = []
     subjects = sub_str.split(";")
     for s in subjects:
-        subfields = construct_geo_subject_subfields(s)
+        subfields = construct_subject_subfields(s)
         fields.append(Field(tag="650", indicators=[" ", "0"], subfields=subfields))
     return fields
 
