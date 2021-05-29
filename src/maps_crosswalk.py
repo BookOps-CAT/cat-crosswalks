@@ -21,8 +21,6 @@ class SuspiciousDataWarning(Warning):
     pass
 
 
-TRUE_HYPEN_PATTERN = re.compile(r".*\S\-\S.*")
-
 MapData = namedtuple(
     "MapData",
     [
@@ -87,7 +85,7 @@ def norm_pub_date_text(pub_date):
 
 
 def has_true_hyphen(s):
-    m = TRUE_HYPEN_PATTERN.match(s)
+    m = re.compile(r".*\S\-\S.*").match(s)
     if m:
         if "--" in s:
             return False
@@ -104,9 +102,12 @@ def norm_subfield_separator(s):
     if has_true_hyphen(s):
         warnings.warn(f"{s}", SuspiciousDataWarning)
 
-    s = s.replace("-", "--").replace(
-        "----", "--"
-    )  # but not "-" as this might be a valid hyphen
+    s = (
+        s.replace(" - ", " -- ")
+        .replace("- ", "-- ")
+        .replace(" -", " --")
+        .replace("----", "--")
+    )
     return s
 
 
@@ -139,13 +140,34 @@ def is_time_subdivision(sub):
     return found
 
 
+def has_invalid_last_chr(sub):
+    pattern = re.compile(r".*[\s.,;]$")
+    if pattern.match(sub):
+        return True
+    else:
+        return False
+
+
+def norm_last_subfield(sub):
+    while has_invalid_last_chr(sub):
+        sub = sub[:-1]
+    return f"{sub}."
+
+
 def construct_geo_subject_subfields(s):
     """
     Generates subject subfields for 651 tag as a pymarc list
     """
     elems = split_subject_elements(s)
+
     subA = elems[0]
     subV = elems[-1]
+
+    if len(elems) == 1:
+        subA = norm_last_subfield(subA)
+
+    subV = norm_last_subfield(subV)
+
     if len(elems) > 2:
         other_subs = elems[1:-1]
     else:
@@ -161,8 +183,17 @@ def construct_geo_subject_subfields(s):
                 subfields.extend(["y", sub])
             else:
                 subfields.extend(["z", sub])
-    subfields.extend(["v", f"{subV}."])
+
+    if len(elems) > 1:
+        subfields.extend(["v", f"{subV}"])
     return subfields
+
+
+def construct_topical_subject_subfields(s):
+    """
+    Creates list of subfield for 650 tag
+    """
+    pass
 
 
 def encode_subjects(sub_str):
@@ -194,7 +225,12 @@ def make_bib(row: namedtuple, sequence: int):
 
     # 007 tag
 
-    tags.append(Field(tag="007", data="aj canzn",))
+    tags.append(
+        Field(
+            tag="007",
+            data="aj canzn",
+        )
+    )
 
     # 008 tag
     dateCreated = date.strftime(date.today(), "%y%m%d")
