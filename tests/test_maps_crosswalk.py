@@ -3,6 +3,7 @@ import pytest
 
 from src.maps_crosswalk import (
     construct_subject_subfields,
+    construct_personal_author_subfields,
     determine_control_number_sequence,
     encode_pub_date,
     encode_scale,
@@ -181,3 +182,35 @@ def test_has_invalid_last_chr(arg, expectation):
 )
 def test_norm_last_subfield(arg, expectation):
     assert norm_last_subfield(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        ("Hall, Sidney", ["a", "Hall, Sidney,", "e", "cartographer."]),
+        ("Otley, J.W.", ["a", "Otley, J.W.,", "e", "cartographer."]),
+        (
+            "Cary, John, approximately 1754-1835",
+            ["a", "Cary, John,", "d", "approximately 1754-1835,", "e", "cartographer."],
+        ),
+        (
+            "Bartholomew, J. G. (John George), 1860-1920",
+            [
+                "a",
+                "Bartholomew, J. G.",
+                "q",
+                "(John George),",
+                "d",
+                "1860-1920,",
+                "e",
+                "cartographer.",
+            ],
+        ),
+        (
+            "Wyld, James, 1812-1887",
+            ["a", "Wyld, James,", "d", "1812-1887,", "e", "cartographer."],
+        ),
+    ],
+)
+def test_construct_personal_author_subfields(arg, expectation):
+    assert construct_personal_author_subfields(arg) == expectation

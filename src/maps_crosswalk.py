@@ -36,6 +36,11 @@ MapData = namedtuple(
         "t500",
         "t505",
         "t561",
+        "t600",
+        "t610",
+        "t611",
+        "t650",
+        "t651",
         "t655",
         "t852",
     ],
@@ -190,6 +195,33 @@ def construct_subject_subfields(s):
     return subfields
 
 
+def identify_subfield_q_position(s):
+    start = s.index("(")
+    end = s.index(")")
+    return (start, end)
+
+
+def identify_subfield_d_positon(s):
+    pass
+
+
+def construct_personal_author_subfields(s):
+    subfields = []
+
+    pos_q_start, pos_q_end = identify_subfield_q_position(s)
+    if pos_q_start != 0 and pos_q_end != 0:
+        # sub $q present
+        q = s[pos_q_start:pos_q_end].strip()
+    else:
+        q = []
+
+    pos_d_start, pos_d_end = identify_subfield_d_position(s)
+
+    subfields = ["a", f"{s},"]
+    subfields.extend(["e", "cartographer."])
+    return subfields
+
+
 def encode_subjects(sub_str):
     fields = []
     subjects = sub_str.split(";")
@@ -228,20 +260,23 @@ def make_bib(row: namedtuple, sequence: int):
 
     # 008 tag
     dateCreated = date.strftime(date.today(), "%y%m%d")
-    pub_year = encode_pub_year(row.pub_year)
+    pub_year = encode_pub_date(row.t260)
     data = f"{dateCreated}s{pub_year}    xx |||||| a  |  |   und d"
     tags.append(Field(tag="008", data=data))
 
     # 034 tag
 
-    esc = encode_scale(row.scale)
+    esc = encode_scale(row.t255)
     if esc is not None:
         tags.append(
             Field(tag="034", indicators=["1", " "], subfields=["a", "a", "b", esc])
         )
 
-    # 110 tag
+    # 100 tag
+    if row.t100:
+        pass
 
+    # 110 tag
     tags.append(
         Field(
             tag="110",
@@ -264,12 +299,12 @@ def make_bib(row: namedtuple, sequence: int):
 
     # 255 tag
 
-    nsc = norm_scale(row.scale)
+    nsc = norm_scale_text(row.scale)
     tags.append(Field(tag="255", indicators=[" ", " "], subfields=["a", nsc]))
 
     # 264 tag
 
-    npub_date = norm_pub_date(row.pub_year)
+    npub_date = norm_pub_date_text(row.pub_year)
     tags.append(
         Field(
             tag="264",
@@ -371,14 +406,14 @@ def create_bibs(src_fh: str, out_fh: str, start_sequence: int):
     reader = source_reader(src_fh)
     sequence = start_sequence
     for row in reader:
-        s = determine_sequence(sequence)
+        s = determine_control_number_sequence(sequence)
         bib = make_bib(row, s)
         print(bib)
-        save2marc(out_fh, bib)
+        # save2marc(out_fh, bib)
         sequence += 1
 
 
 if __name__ == "__main__":
-    src_fh = "./files/Folded maps for inventory records (Draft) - Sheet1.csv"
+    src_fh = "./files/pre 1900 Folded maps for inventory records - Sheet1.csv"
     out_fh = "./files/folded_maps.mrc"
     create_bibs(src_fh, out_fh, 1)
