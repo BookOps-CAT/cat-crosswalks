@@ -35,7 +35,6 @@ MapData = namedtuple(
         "t490",
         "t500",
         "t505",
-        "t561",
         "t600",
         "t610",
         "t611",
@@ -195,39 +194,107 @@ def construct_subject_subfields(s):
     return subfields
 
 
-def identify_subfield_q_position(s):
-    start = s.index("(")
-    end = s.index(")")
-    return (start, end)
+def identify_t100_subfield_q_position(s):
+    try:
+        start = s.index("(")
+        end = s.index(")")
+        return (start, end + 1)
+    except ValueError:
+        return None
 
 
-def identify_subfield_d_positon(s):
-    pass
+def identify_t100_subfield_q(s, pos):
+    try:
+        start, end = pos
+        return s[start : end + 1].strip()
+    except TypeError:
+        return None
+
+
+def identify_t100_subfield_d_position(s, sub_d):
+    if sub_d:
+        return s.index(sub_d)
+    else:
+        return None
+
+
+def identify_t100_subfield_d(s):
+    p = re.compile(r".*,\s(.*\d{2,})$")
+    m = p.match(s)
+    if m:
+        return m.group(1)
+    else:
+        return None
+
+
+def add_preceding_comma_to_last_subfield(subfields):
+    last = subfields[-1].strip()
+    new_subfields = subfields[:-1]
+    new_subfields.append(f"{last},")
+    return new_subfields
 
 
 def construct_personal_author_subfields(s):
+    """
+    Subfields for tag 100
+    """
     subfields = []
 
-    pos_q_start, pos_q_end = identify_subfield_q_position(s)
-    if pos_q_start != 0 and pos_q_end != 0:
-        # sub $q present
-        q = s[pos_q_start:pos_q_end].strip()
+    sub_d = identify_t100_subfield_d(s)
+    pos_d = identify_t100_subfield_d_position(s, sub_d)
+
+    pos_q = identify_t100_subfield_q_position(s)
+    sub_q = identify_t100_subfield_q(s, pos_q)
+
+    if sub_q:
+        sub_a = s[: pos_q[0]].strip()
+    elif sub_d:
+        sub_a = s[:pos_d].strip()
     else:
-        q = []
+        sub_a = s[:].strip()
 
-    pos_d_start, pos_d_end = identify_subfield_d_position(s)
+    subfields.extend(["a", sub_a])
+    if sub_q:
+        subfields.extend(["q", sub_q])
+    if sub_d:
+        subfields.extend(["d", sub_d])
 
-    subfields = ["a", f"{s},"]
+    final_subfields = add_preceding_comma_to_last_subfield(subfields)
+
+    final_subfields.extend(["e", "cartographer."])
+    return final_subfields
+
+
+def construct_corporate_author_subfields(s):
+    """
+    Subfields for 110 tag
+    """
+    subfields = add_preceding_comma_to_last_subfield(["a", s])
     subfields.extend(["e", "cartographer."])
     return subfields
 
 
-def encode_subjects(sub_str):
+def subject_indicators(tag):
+    if tag == "600":
+        indicators = ["1", "0"]
+    elif tag == "610":
+        indicators = ["2", "0"]
+    elif tag == "611":
+        indicators = ["2", "0"]
+    else:
+        indicators = [" ", "0"]
+    return indicators
+
+
+def encode_subjects(sub_str, tag):
+
+    indicators = subject_indicators(tag)
+
     fields = []
-    subjects = sub_str.split(";")
+    subjects = [s.strip() for s in sub_str.split(";") if s.strip() != ""]
     for s in subjects:
         subfields = construct_subject_subfields(s)
-        fields.append(Field(tag="650", indicators=[" ", "0"], subfields=subfields))
+        fields.append(Field(tag=tag, indicators=indicators, subfields=subfields))
     return fields
 
 
@@ -274,37 +341,50 @@ def make_bib(row: namedtuple, sequence: int):
 
     # 100 tag
     if row.t100:
-        pass
+        subfields = construct_personal_author_subfields(row.t100)
+        tags.append(Field(tag="100", indicators=["1", " "], subfields=subfields))
 
     # 110 tag
-    tags.append(
-        Field(
-            tag="110",
-            indicators=["1", " "],
-            subfields=["a", f"{row.author},", "e", "cartographer."],
+    if row.t110 and not row.t100:
+        subfields = construct_corporate_author_subfields(row.t110)
+        tags.append(
+            Field(
+                tag="110",
+                indicators=["1", " "],
+                subfields=subfields,
+            )
         )
-    )
 
     # 245 tag
-
     tags.append(
-        Field(tag="245", indicators=["1", "0"], subfields=["a", f"{row.title}."])
+        Field(tag="245", indicators=["1", "0"], subfields=["a", f"{row.t245.strip()}."])
     )
 
     # 246 tag
-    if row.alt_title:
+    if row.t246:
         tags.append(
-            Field(tag="246", indicators=["3", " "], subfields=["a", row.alt_title])
+            Field(tag="246", indicators=["3", " "], subfields=["a", row.t246.strip()])
+        )
+
+    # 250 tag
+    if row.t250:
+        tags.append(
+            Field(tag="250", indicators=[" ", " "], subfields=["a", row.t250.strip()])
         )
 
     # 255 tag
-
-    nsc = norm_scale_text(row.scale)
+    nsc = norm_scale_text(row.t255)
     tags.append(Field(tag="255", indicators=[" ", " "], subfields=["a", nsc]))
 
     # 264 tag
+    # if row.t100:
+    #     publisher = row.t100.strip()
+    if row.t110:
+        publisher = row.t110.strip()
+    else:
+        publisher = "[Publisher not identified]"
+    npub_date = norm_pub_date_text(row.t260)
 
-    npub_date = norm_pub_date_text(row.pub_year)
     tags.append(
         Field(
             tag="264",
@@ -313,7 +393,7 @@ def make_bib(row: namedtuple, sequence: int):
                 "a",
                 "[Place of publication not identified] :",
                 "b",
-                f"{row.author},",
+                f"{publisher},",
                 "c",
                 npub_date,
             ],
@@ -352,43 +432,70 @@ def make_bib(row: namedtuple, sequence: int):
     )
 
     # 490 tag
-    if row.series:
+    if row.t490:
         tags.append(
-            Field(tag="490", indicators=["0", " "], subfields=["a", row.series])
+            Field(tag="490", indicators=["0", " "], subfields=["a", row.t490.strip()])
         )
 
     # 500 tag
-    if row.note:
+    if row.t500:
         tags.append(
-            Field(tag="500", indicators=[" ", " "], subfields=["a", f"{row.note}."])
+            Field(
+                tag="500",
+                indicators=[" ", " "],
+                subfields=["a", f"{row.t500.strip()}."],
+            )
         )
 
     # 505 tag
-
-    if row.content:
+    if row.t505:
         tags.append(
-            Field(tag="505", indicators=["0", " "], subfields=["a", f"{row.content}."])
+            Field(
+                tag="505",
+                indicators=["0", " "],
+                subfields=["a", f"{row.t505.strip()}."],
+            )
         )
 
+    # 600 tags
+    if row.t600:
+        subject_fields = encode_subjects(row.t600, "600")
+        tags.extend(subject_fields)
+
+    # 610 tags
+    if row.t610:
+        subject_fields = encode_subjects(row.t610, "610")
+        tags.extend(subject_fields)
+
+    # 611 tags
+    if row.t611:
+        subject_fields = encode_subjects(row.t611, "611")
+        tags.extend(subject_fields)
+
     # 650 tags
-    if row.subjects:
-        subject_fields = encode_subjects(row.subjects)
+    if row.t650:
+        subject_fields = encode_subjects(row.t650, "650")
+        tags.extend(subject_fields)
+
+    # 651 tags
+    if row.t651:
+        subject_fields = encode_subjects(row.t651, "651")
         tags.extend(subject_fields)
 
     # 655 tag
-    if row.genre:
+    if row.t655:
         tags.append(
             Field(
                 tag="655",
                 indicators=[" ", "7"],
-                subfields=["a", f"{row.genre}.", "2", "lcgft"],
+                subfields=["a", f"{row.t655}.", "2", "lcgft"],
             )
         )
 
     # tag 852
-    if row.call_number:
+    if row.t852:
         tags.append(
-            Field(tag="852", indicators=["8", " "], subfields=["h", row.call_number])
+            Field(tag="852", indicators=["8", " "], subfields=["h", row.t852.strip()])
         )
 
     for t in tags:
@@ -397,7 +504,7 @@ def make_bib(row: namedtuple, sequence: int):
 
 
 def source_reader(fh: str):
-    for row in map(MapData._make, csv.reader(open(fh, "r"))):
+    for row in map(MapData._make, csv.reader(open(fh, "r", encoding="utf-8"))):
         if row.barcode != "Barcode":
             yield row
 
@@ -408,12 +515,11 @@ def create_bibs(src_fh: str, out_fh: str, start_sequence: int):
     for row in reader:
         s = determine_control_number_sequence(sequence)
         bib = make_bib(row, s)
-        print(bib)
-        # save2marc(out_fh, bib)
+        save2marc(out_fh, bib)
         sequence += 1
 
 
 if __name__ == "__main__":
-    src_fh = "./files/pre 1900 Folded maps for inventory records - Sheet1.csv"
-    out_fh = "./files/folded_maps.mrc"
+    src_fh = "../files/pre 1900 Folded maps for inventory records - Sheet1.csv"
+    out_fh = "../files/folded_maps.mrc"
     create_bibs(src_fh, out_fh, 1)

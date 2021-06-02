@@ -4,11 +4,16 @@ import pytest
 from src.maps_crosswalk import (
     construct_subject_subfields,
     construct_personal_author_subfields,
+    construct_corporate_author_subfields,
     determine_control_number_sequence,
     encode_pub_date,
     encode_scale,
     has_invalid_last_chr,
     has_true_hyphen,
+    identify_t100_subfield_d_position,
+    identify_t100_subfield_d,
+    identify_t100_subfield_q_position,
+    identify_t100_subfield_q,
     norm_last_subfield,
     norm_scale_text,
     norm_pub_date_text,
@@ -111,6 +116,10 @@ def test_norm_pub_date_text(arg, expectation):
                 "Maps.",
             ],
         ),
+        (
+            "Mount Auburn Cemetery (Cambridge, Mass.) -- Maps",
+            ["a", "Mount Auburn Cemetery (Cambridge, Mass.)", "v", "Maps."],
+        ),
     ],
 )
 def test_construct_subject_subfields(arg, expectation):
@@ -187,6 +196,46 @@ def test_norm_last_subfield(arg, expectation):
 @pytest.mark.parametrize(
     "arg,expectation",
     [
+        ("foo (bar spam)", (4, 14)),
+        ("foo", None),
+        ("foo (bar", None),
+        ("foo bar)", None),
+    ],
+)
+def test_identify_t100_subfield_q_position(arg, expectation):
+    assert identify_t100_subfield_q_position(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg1,arg2,expectation",
+    [
+        ("foo (bar spam)", (4, 14), "(bar spam)"),
+        ("foo", None, None),
+        ("foo (bar", None, None),
+        ("foo bar)", None, None),
+    ],
+)
+def test_identify_t100_subfield_q(arg1, arg2, expectation):
+    assert identify_t100_subfield_q(arg1, arg2) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        ("Hall, Sidney", None),
+        ("Otley, J.W.", None),
+        ("Wyld, James, 1812-1887", "1812-1887"),
+        ("Cary, John, approximately 1754-1835", "approximately 1754-1835"),
+        ("Bartholomew, J. G. (John George), 1860-1920", "1860-1920"),
+    ],
+)
+def test_identify_t100_subfield_d(arg, expectation):
+    assert identify_t100_subfield_d(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
         ("Hall, Sidney", ["a", "Hall, Sidney,", "e", "cartographer."]),
         ("Otley, J.W.", ["a", "Otley, J.W.,", "e", "cartographer."]),
         (
@@ -210,7 +259,25 @@ def test_norm_last_subfield(arg, expectation):
             "Wyld, James, 1812-1887",
             ["a", "Wyld, James,", "d", "1812-1887,", "e", "cartographer."],
         ),
+        (
+            "Bartholomew, J. G. (John George)",
+            ["a", "Bartholomew, J. G.", "q", "(John George),", "e", "cartographer."],
+        ),
     ],
 )
 def test_construct_personal_author_subfields(arg, expectation):
+    assert construct_personal_author_subfields(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        (
+            "Rand McNally and Company",
+            ["a", "Rand McNally and Company,", "e", "cartographer."],
+        ),
+        ("A. Hoen & Co.", ["a", "A. Hoen & Co.,", "e", "cartographer."]),
+    ],
+)
+def test_construct_corporate_author_subfields(arg, expectation):
     assert construct_personal_author_subfields(arg) == expectation
