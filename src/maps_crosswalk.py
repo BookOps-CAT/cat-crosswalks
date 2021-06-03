@@ -306,7 +306,8 @@ def make_bib(row: namedtuple, sequence: int):
     tags = []
 
     # 001 tag
-    tags.append(Field(tag="001", data=f"bkops-map-{sequence}"))
+    control_no = f"bkops-map-{sequence}"
+    tags.append(Field(tag="001", data=f"{control_no}"))
 
     # 003 tag
     tags.append(Field(tag="003", data="BookOps"))
@@ -356,9 +357,21 @@ def make_bib(row: namedtuple, sequence: int):
         )
 
     # 245 tag
-    tags.append(
-        Field(tag="245", indicators=["1", "0"], subfields=["a", f"{row.t245.strip()}."])
-    )
+    if not row.t100 and not row.t110:
+        indicators = ["0", "0"]
+    else:
+        indicators = ["1", "0"]
+
+    if row.t245:
+        tags.append(
+            Field(
+                tag="245",
+                indicators=indicators,
+                subfields=["a", f"{row.t245.strip()}."],
+            )
+        )
+    else:
+        warnings.warn(f"{control_no} record missing title", SuspiciousDataWarning)
 
     # 246 tag
     if row.t246:
@@ -498,8 +511,14 @@ def make_bib(row: namedtuple, sequence: int):
             Field(tag="852", indicators=["8", " "], subfields=["h", row.t852.strip()])
         )
 
+    # 949 tag with Sierra commands
+    tags.append(
+        Field(tag="949", indicators=[" ", " "], subfields=["a", "*b2=e;b3=a;bn=map"])
+    )
+
     for t in tags:
         bib.add_ordered_field(t)
+
     return bib
 
 
