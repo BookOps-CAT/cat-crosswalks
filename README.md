@@ -48,7 +48,7 @@ $ cd ~/[your_path_to_repos_directory]/cat-crosswalks
 
 bash example:
 ```bash
-$ python src/flourish_bibs.py [path_to_src_marc_file]
+$ python ~/[path_to_repo_directory]/cat-crosswalks/src/flourish_bibs.py [path_to_src_marc_file]
 ```
 
 The script outputs manipulated records into a file in the same directory where the source file resides. A newly created file has the same base name as the source file and has "-PRC" suffix added.
