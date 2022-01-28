@@ -140,7 +140,10 @@ def process(file: str) -> None:
 
     # to avoid appending the same records to a file by accident
     # the script deletes PRC files if found
-    os.remove(proc_file)
+    try:
+        os.remove(proc_file)
+    except FileNotFoundError:
+        pass
 
     with open(file, "rb") as marcfile:
         reader = MARCReader(marcfile)
