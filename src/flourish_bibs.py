@@ -6,16 +6,17 @@ To run the script, open your command-line tool, and enter:
 $ python src/flourish_bibs.py [src MARC file path]
 
 """
+import csv
 import os
 import sys
 from typing import Optional
 
 from pymarc import Field, MARCReader, Record
 
-from utils import save2marc
+from utils import save2marc, save2csv
 
 
-def processed_file_path(file: str) -> str:
+def processed_file_path(file: str, suffix: str) -> str:
     """
     Creates a file path for processed records.
     The path points to the same folder as source file, has the
@@ -23,13 +24,14 @@ def processed_file_path(file: str) -> str:
 
     Args:
         file:                   source marc file path
+        suffix:                 string to append to file name
 
     Returns:
         path to processed marc file
     """
     head, tail = os.path.split(file)
     base_name = tail[:-4]
-    return os.path.join(head, f"{base_name}-PRC.mrc")
+    return os.path.join(head, f"{base_name}-{suffix}.mrc")
 
 
 def flip_911(bib: Record) -> None:
@@ -136,7 +138,17 @@ def process(file: str) -> None:
     Args:
         file:               path to MARC file to be processed
     """
-    proc_file = processed_file_path(file)
+    # load control number "registry"
+    try:
+        with open("src/flourish-registry.csv", "r", encoding="utf-8") as csvfile:
+            reader = csv.reader(csvfile)
+            registry = set([row[0] for row in reader])
+    except FileNotFoundError:
+        registry = set()
+        print("Creating control number registry file.")
+
+    proc_file = processed_file_path(file, suffix="PRC")
+    dup_file = processed_file_path(file, suffix="DUP")
 
     # to avoid appending the same records to a file by accident
     # the script deletes PRC files if found
@@ -147,18 +159,32 @@ def process(file: str) -> None:
 
     with open(file, "rb") as marcfile:
         reader = MARCReader(marcfile)
-        n = 0
+        p = 0
+        d = 0
         for bib in reader:
+
             add_oclc_fields(bib)
             flip_911(bib)
             add_command_tag(bib)
 
             callno = get_call_no(bib)
             create_item_tag(bib, callno)
-            save2marc(proc_file, bib)
-            n += 1
 
-    print(f"{n} records have been maniuplated and saved to {proc_file}")
+            # check in the control number "registry" if not duplicate
+            control_no = bib["001"].data.strip()
+            if control_no not in registry:
+                save2marc(proc_file, bib)
+                save2csv("src/flourish-registry.csv", [control_no, callno, file])
+                registry.add(control_no)
+                p += 1
+            else:
+                d += 1
+                save2marc(dup_file, bib)
+                print(f"Found duplicate control # {control_no} in the file.")
+
+    print(f"Total # of records in src file: {p + d}.")
+    print(f"{p} records have been maniuplated and saved to {proc_file}")
+    print(f"Found {d} duplicate records.")
 
 
 if __name__ == "__main__":
