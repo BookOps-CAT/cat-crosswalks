@@ -111,24 +111,25 @@ def create_item_tag(bib: Record, callno: str) -> None:
     """
 
     # fmt: off
-    bib.add_ordered_field(
-        Field(
-            tag="949",
-            indicators=[" ", "1"],
-            subfields=[
-                "z", "8528",
-                "a", callno,
-                "i", "BARCODE TO BE SUPPLIED",
-                "l", "mym38",
-                "t", "7",
-                "h", "32",
-                "o", "1",
-                "s", "-",
-                "v", "MUS/",
-            ],
+    if callno is not None:
+        bib.add_ordered_field(
+            Field(
+                tag="949",
+                indicators=[" ", "1"],
+                subfields=[
+                    "z", "8528",
+                    "a", callno,
+                    "i", "BARCODE TO BE SUPPLIED",
+                    "l", "mym38",
+                    "t", "7",
+                    "h", "32",
+                    "o", "1",
+                    "s", "-",
+                    "v", "MUS/",
+                ],
+            )
         )
-    )
-    # fmt: on
+        # fmt: on
 
 
 def process(file: str) -> None:
@@ -149,6 +150,7 @@ def process(file: str) -> None:
 
     proc_file = processed_file_path(file, suffix="PRC")
     dup_file = processed_file_path(file, suffix="DUP")
+    err_file = processed_file_path(file, suffix="ERR")
 
     # to avoid appending the same records to a file by accident
     # the script deletes PRC files if found
@@ -172,7 +174,11 @@ def process(file: str) -> None:
 
             # check in the control number "registry" if not duplicate
             control_no = bib["001"].data.strip()
-            if control_no not in registry:
+            if callno is None:
+                print(f"Isolating bib without call number (oclc # {control_no})")
+                save2marc(err_file, bib)
+
+            elif control_no not in registry:
                 save2marc(proc_file, bib)
                 save2csv("src/flourish-registry.csv", [control_no, callno, file])
                 registry.add(control_no)
