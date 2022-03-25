@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8'?>
+      <record xmlns="http://www.loc.gov/MARC21/slim">
+        <leader>00000npcaa2200000 u 4500</leader>
+        <controlfield tag="005">20211009205537.5</controlfield>
+        <controlfield tag="007">sd fsngnnmmned</controlfield>
+        <controlfield tag="008">120827t20122004nyua          000 0 eng d</controlfield>
+        <datafield tag="040" ind1=" " ind2=" ">
+          <subfield code="a">NYP</subfield>
+          <subfield code="b">eng</subfield>
+          <subfield code="e">rda</subfield>
+          <subfield code="c">NYP</subfield>
+          <subfield code="d">NYP</subfield>
+        </datafield>
+        <datafield tag="100" ind1="0" ind2=" ">
+          <subfield code="a">OCLC RecordBuilder,</subfield>
+          <subfield code="e">remix artist.</subfield>
+    </datafield>
+        <datafield tag="245" ind1="1" ind2="0">
+          <subfield code="a">Record Builder Added This Test Record On 06/26/2013 13:01:47.</subfield>
+    </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+          <subfield code="a">1 audio disc :</subfield>
+          <subfield code="c">4 3/4 in.</subfield>
+    </datafield>
+        <datafield tag="336" ind1=" " ind2=" ">
+          <subfield code="a">performed music</subfield>
+          <subfield code="b">s</subfield>
+          <subfield code="2">rdamedia</subfield>
+    </datafield>
+        <datafield tag="337" ind1=" " ind2=" ">
+          <subfield code="a">audio</subfield>
+          <subfield code="b">s</subfield>
+          <subfield code="2">rdamedia</subfield>
+    </datafield>
+        <datafield tag="338" ind1=" " ind2=" ">
+          <subfield code="a">audio disc</subfield>
+          <subfield code="b">sd</subfield>
+          <subfield code="2">rdacarrier</subfield>
+    </datafield>
+        <datafield tag="344" ind1=" " ind2=" ">
+          <subfield code="a">digital</subfield>
+          <subfield code="2">rdatr</subfield>
+    </datafield>
+        <datafield tag="344" ind1=" " ind2=" ">
+          <subfield code="b">optical</subfield>
+          <subfield code="2">rdarm</subfield>
+    </datafield>
+        <datafield tag="344" ind1=" " ind2=" ">
+          <subfield code="g">stereo</subfield>
+          <subfield code="2">rdacpc</subfield>
+    </datafield>
+        <datafield tag="347" ind1=" " ind2=" ">
+          <subfield code="a">audio file</subfield>
+          <subfield code="2">rdaft</subfield>
+    </datafield>
+        <datafield tag="347" ind1=" " ind2=" ">
+          <subfield code="b">CD audio</subfield>
+    </datafield>
+        <datafield tag="382" ind1="1" ind2="1">
+          <subfield code="a">rapper</subfield>
+          <subfield code="2">lcmpt</subfield>
+    </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+          <subfield code="a">TEST RECORD -- DO NOT USE.</subfield>
+    </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+          <subfield code="a">RECORD UPDATE TEST 3</subfield>
+    </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+          <subfield code="a">Chopped and screwed (Music)</subfield>
+    </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+          <subfield code="a">Remixes (Music)</subfield>
+          <subfield code="2">lcgft</subfield>
+    </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+          <subfield code="a">Chopped and screwed (Music)</subfield>
+          <subfield code="2">lcgft</subfield>
+    </datafield>
+        <datafield tag="655" ind1=" " ind2="7">
+          <subfield code="a">Rap (Music)</subfield>
+          <subfield code="2">lcgft</subfield>
+    </datafield>
+  </record>

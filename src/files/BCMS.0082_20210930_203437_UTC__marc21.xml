@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <record>
+    <leader>00000npcaa2200000 u 4500</leader>
+    <controlfield tag="005">20210924155245.0</controlfield>
+    <controlfield tag="008">210924i19402017xxu                 eng d</controlfield>
+    <datafield ind1="7" ind2=" " tag="024">
+      <subfield code="a">()BCMS.0082</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1="" ind2="" tag="035">
+      <subfield code="a">()BCMS.0082-20210924</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="040">
+      <subfield code="b">eng</subfield>
+    </datafield>
+    <datafield ind1="0" ind2=" " tag="041">
+      <subfield code="a">eng</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="099">
+      <subfield code="a">BCMS.0082</subfield>
+    </datafield>
+    <datafield ind1="2" ind2=" " tag="110">
+      <subfield code="a">Brooklyn Heights Garden Club (Brooklyn Heights, New York, N.Y.),</subfield>
+      <subfield code="e">creator.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2="0" tag="245">
+      <subfield code="a">Brooklyn Heights Garden Club Collection,</subfield>
+      <subfield code="f">1940-2017.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="300">
+      <subfield code="a">4.8</subfield>
+      <subfield code="f">Linear Feet (in 6 boxes.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="351">
+      <subfield code="b">Materials are grouped in four series by type. In some cases, materials are grouped according to which member collected them and donated them to this collection. The Christmas tree scrapbooks and membership directories are arranged chronologically and the materials from other organizations are arranged alphabetically.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="500">
+      <subfield code="a">Processing Information: The three Christmas tree lighting scrapbooks created by Pauline Herd were in composition notebooks and in very poor condition. These scrapbooks were disassembled in order to best preserve the materials they contained. The archivist created preservation photocopies of news clippings where possible but retained original material such as photographs, ephemera, and correspondence.
+
+The two larger scrapbooks were retained intact with some minor repairs to the binding of Scrapbook 1.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="506">
+      <subfield code="a">Open to researchers without restriction.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="520">
+      <subfield code="a">Documents, photographs, ephemera, clippings and scrapbooks documenting the history of the Brooklyn Heights Garden Club.</subfield>
+    </datafield>
+    <datafield ind1="8" ind2=" " tag="524">
+      <subfield code="a">Identification of item/descriptive title, date (if known); Brooklyn Heights Garden Club Collection, BCMS_0082; Brooklyn Public Library, Center for Brooklyn History.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="540">
+      <subfield code="a">While many items at the Center for Brooklyn History are unrestricted, we do not own reproduction rights to all materials. Be aware of the several kinds of rights that might apply: copyright, licensing and trademarks. The researcher assumes all responsibility for copyright questions.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="541">
+      <subfield code="a">Gift of the Brooklyn Heights Garden Club, 2019.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="544">
+      <subfield code="n">Breukelen, Netherlands collection (2007.014)
+
+Brooklyn Heights Association collection (ARC.148)
+
+Brooklyn Heights Association Records (BCMS.0035)
+
+Robert Vadheim Brooklyn Heights Association collection (1988.051).</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="555">
+      <subfield code="a">Finding aid online:</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/bcms_0082</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Gardens</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Urban gardening</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Brooklyn (New York, N.Y.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Brooklyn Heights (New York, N.Y.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Federated Garden Clubs of New York State</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Garden clubs</subfield>
+    </datafield>
+    <datafield ind1="4" ind2="2" tag="856">
+      <subfield code="y">Finding aid online</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/bcms_0082</subfield>
+    </datafield>
+  </record>
+</collection>
+
