@@ -55,3 +55,8 @@ The script outputs manipulated records into a file in the same directory where t
 
 6. Email processed file to database manager for import
 
+## ArchivesSpace to Worldcat
+A set of scripts used to create OCLC WorldCat records for finding aids exported from ArchivesSpace.
+
+ArchivesSpace can serialize finding aids to MARC XML. These records should be converted to MARC21 and validated using [MarcEdit software](https://marcedit.reeset.net/). If required MarcEdit can be used to fix any validation issues and serialize records back to MARC XML which in turn can be used to add record to Worldcat using [bookops-worldcat wrapper](https://github.com/BookOps-CAT/bookops-worldcat).
+
