@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <record>
+    <leader>00000npcaa2200000 u 4500</leader>
+    <controlfield tag="003">NyBlHS</controlfield>
+    <controlfield tag="005">20220209213302.0</controlfield>
+    <controlfield tag="008">220318i18602011xx                  eng d</controlfield>
+    <datafield ind1="7" ind2=" " tag="024">
+      <subfield code="a">(NyBlHS)2017.015</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1="" ind2="" tag="035">
+      <subfield code="a">(NyBlHS)2017.015-20220209</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="040">
+      <subfield code="a">NyBlHS</subfield>
+      <subfield code="b">eng</subfield>
+      <subfield code="c">NyBlHS</subfield>
+      <subfield code="e">Describing Archives: A Content Standard</subfield>
+    </datafield>
+    <datafield ind1="0" ind2=" " tag="041">
+      <subfield code="a">eng</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="099">
+      <subfield code="a">2017.015</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="100">
+      <subfield code="a">Whitehead, Barbara,</subfield>
+      <subfield code="e">creator.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2="0" tag="245">
+      <subfield code="a">Beer and Buehl family papers,</subfield>
+      <subfield code="f">circa 1870-2011</subfield>
+      <subfield code="g">1908-circa 1945</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="300">
+      <subfield code="a">6.79</subfield>
+      <subfield code="f">Linear Feet (in two manuscript boxes, one half manuscript box, 1 oversize flat box, and one flat file.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="351">
+      <subfield code="b">The collection is primarily arranged by creator and/or subject, and then arranged chronologically.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="500">
+      <subfield code="a">Processing Information: The archivist rehoused materials in archival folders and boxes. The archivist also created preservation photocopies of newspaper clippings. All folder titles have been supplied by the archivist.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="500">
+      <subfield code="a">Materials Separated from the Resource: Dorothy Buehl's 1937 yearbook from Richmond Hill High School has been transferred to Queens Public Library.  Castanets that Harold Buehl brought back from Spain after World War II have been deaccessioned and returned to the donor. November 26, 1972 issue of  LI: Newsday's Magazine for Long Island  has been deaccessioned and returned to the donor.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="506">
+      <subfield code="a">Open to researchers without restriction. The collection may only be used in the library and is not available through interlibrary loan. Requests to view the collection must be made at least 48 hours in advance of visit.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="520">
+      <subfield code="a">This collection includes the papers of the families of Robert Louis Beer and Dorothy Buehl Beer, collected by their daughter Barbara Whitehead. The Buehl and Beer families settled in Brooklyn after emigrating from Germany in the mid-1800s and much of the collection centers on Fredeick Max Beer's (Robert Louis Beer's father) career as an engineer in Brooklyn. Materials include correspondence, military records, apartment building floor plans, birth and death certificates, baptismal and confirmation certificates, diplomas, photographs, and an autograph album.</subfield>
+    </datafield>
+    <datafield ind1="8" ind2=" " tag="524">
+      <subfield code="a">Identification of item, date (if known); Beer and Buehl Family papers, 2017.015, Box and Folder number; Brooklyn Public Library, Center for Brooklyn History.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="535">
+      <subfield code="a">Originals of some of the birth, marriage, and death certificates included in the collection are held in the NYC Municipal Archives.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="540">
+      <subfield code="a">While many items at the Center for Brooklyn History are unrestricted, we do not own reproduction rights to all materials. Be aware of the several kinds of rights that might apply: copyright, licensing and trademarks. The researcher assumes all responsibility for copyright questions.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="541">
+      <subfield code="a">Gift of Barbara Whitehead, 2017.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="544">
+      <subfield code="n">The Edward H. Nabb Center for Delmarva History and Culture at Salisbury University holds the Whitehead-Beer Collection, 1859-2000 (2008.039), which includes materials from Dorothy Buehl Beer and Barbara Beer Whitehead.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="555">
+      <subfield code="a">Finding aid online:</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/2017_015</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="561">
+      <subfield code="a">Military records of Robert L. Beer and Harold Buehl and correspondence from Harold Buehl were originally donated to the Edward H. Nabb Research Center for Delmarva History and Culture at Salisbury University in 2008. In 2017, Barbara Whitehead requested those items be transferred to the Brooklyn Historical Society. The Center for Brooklyn History received these items from the Nabb Research Center in 2021.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="583">
+      <subfield code="a">Due to space constraints and scope, CBH decided to receive and accession from the donor only those materials most related to Brooklyn and the family members who lived there.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2="7" tag="600">
+      <subfield code="a">Beer family,</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1="3" ind2="7" tag="600">
+      <subfield code="a">Buehl family,</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1="0" ind2="0" tag="630">
+      <subfield code="a">United States. Army.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">World War, 1939-1945</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Soldiers--New York (State)--Correspondence</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Engineers |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Civil engineering |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Composers |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">German Americans |x History</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">German Americans |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Military life</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">United States. Navy</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Brooklyn (New York, N.Y.) |x Genealogy</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="655">
+      <subfield code="a">Correspondence</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Autograph albums</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Photographic prints</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Baptismal certificates</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Birth certificates</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Death certificates</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Achievement certificates</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Clippings (information artifacts)</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Blueprints (reprographic copies)</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Floor plans</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Military records</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="700">
+      <subfield code="a">Beer family,</subfield>
+      <subfield code="e">creator.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="700">
+      <subfield code="a">Buehl family,</subfield>
+      <subfield code="e">creator.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="700">
+      <subfield code="a">Whitehead, Barbara,</subfield>
+      <subfield code="e">former owner.</subfield>
+    </datafield>
+    <datafield ind1="4" ind2="2" tag="856">
+      <subfield code="y">Finding aid online</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/2017_015</subfield>
+    </datafield>
+  </record>
+</collection>
+

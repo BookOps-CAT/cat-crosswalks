@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <record>
+    <leader>00000npcaa2200000 u 4500</leader>
+    <controlfield tag="005">20211001200236.0</controlfield>
+    <controlfield tag="008">220201s        xxu                 eng d</controlfield>
+    <datafield ind1="7" ind2=" " tag="024">
+      <subfield code="a">()BCMS.0077</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1="" ind2="" tag="035">
+      <subfield code="a">()BCMS.0077-20211001</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="040">
+      <subfield code="b">und</subfield>
+    </datafield>
+    <datafield ind1="0" ind2=" " tag="041">
+      <subfield code="a">eng</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="099">
+      <subfield code="a">BCMS.0077</subfield>
+    </datafield>
+    <datafield ind1="0" ind2="0" tag="245">
+      <subfield code="a">Hattie Carthan Collection,</subfield>
+      <subfield code="f">1969-2007, bulk 1970-1995.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="300">
+      <subfield code="a">3.6</subfield>
+      <subfield code="f">Linear Feet (, 4 legal size document boxes, 1 document box, 1 oversize flat box)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="351">
+      <subfield code="b">This collection is arranged in four series:
+
+ Series I: Administrative is arranged by type. Items have been foldered chronologically when possible. Early administrative items are foldered together in original order.
+
+ Series II: Programs and Events is arranged by type. Items have been foldered chronologically when possible.
+
+ Series III: Clippings is not arranged.
+
+ Series IV: Photographs is arranged to reflect original order whenever possible. Photographs removed from photo albums have been housed in binders. Items accessioned with no original order are housed in box 5.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="500">
+      <subfield code="a">Location of resource: Brooklyn Collection Morgue, Shelf 6.3.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="506">
+      <subfield code="a">This collection is located in the Brooklyn Collection at Brooklyn Public Library’s Central Branch at Grand Army Plaza. The collection may only be used in the library and is not available through interlibrary loan. Requests to view the collection must be made at least 48 hours in advance of visit.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="520">
+      <subfield code="a">Materials concerning the life of Hattie Carthan and the Magnolia Tree Earth Center, an environmental education center founded by Carthan in Bedford-Stuyvesant. Items include photographs, clippings, program information and administrative documents.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="520">
+      <subfield code="a">This collection should be cited as the Hattie Carthan Collection, Brooklyn Public Library – Brooklyn Collection.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="540">
+      <subfield code="a">While many items in the Brooklyn Collection are unrestricted, we do not own reproduction rights to all materials. Be aware of the several kinds of rights that might apply: copyright, licensing and trademarks. The researcher assumes all responsibility for copyright questions.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="541">
+      <subfield code="a">This collection was donated by Bernice Elizabeth Green in 2020.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="544">
+      <subfield code="n"> Bedford-Stuyvesant Youth in Action Collection 
+
+ Brooklyn Ephemera Collection: Organizations: Magnolia Tree Earth Center of Bedford-Stuyvesant, Inc.  
+
+   Economic Development Programs in Bedford-Stuyvesant, Brooklyn, New York, under the Special Impact Program : Report to the Congress. U.S. General Accounting Office, 1973. 
+
+   Garmey, Jane. City green : public gardens of New York. The Monacelli Press, 2018. 
+
+   Manoni, Mary H. Bedford-Stuyvesant ; the anatomy of a central city community. Quadrangle/The New York times Book Co., 1973.  .</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="555">
+      <subfield code="a">Finding aid online:</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/bcms_0077/</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">African American environmentalists</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Environmental education</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Magnolia Tree Earth Center</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Social action--United States--History--20th century</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Urban gardening</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Bedford-Stuyvesant (New York, N.Y.)</subfield>
+    </datafield>
+    <datafield ind1="4" ind2="2" tag="856">
+      <subfield code="y">Finding aid online</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/bcms_0077/</subfield>
+    </datafield>
+  </record>
+</collection>
+

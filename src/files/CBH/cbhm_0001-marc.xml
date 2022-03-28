@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <record>
+    <leader>00000npcaa2200000 u 4500</leader>
+    <controlfield tag="005">20220110184022.0</controlfield>
+    <controlfield tag="008">220110i19472014xx                  eng d</controlfield>
+    <datafield ind1="7" ind2=" " tag="024">
+      <subfield code="a">()CBHM.0001</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1="" ind2="" tag="035">
+      <subfield code="a">()CBHM.0001-20220110</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="040">
+      <subfield code="b">eng</subfield>
+    </datafield>
+    <datafield ind1="0" ind2=" " tag="041">
+      <subfield code="a">eng</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="099">
+      <subfield code="a">CBHM.0001</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="100">
+      <subfield code="a">D'Agosta, Constance,</subfield>
+      <subfield code="e">creator.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2="0" tag="245">
+      <subfield code="a">Constance D'Agosta Brooklyn Dodgers Collection,</subfield>
+      <subfield code="f">1947-2014.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="300">
+      <subfield code="a">7.6</subfield>
+      <subfield code="f">Linear Feet (in 4 legal document boxes, 1 record carton, 4 flat boxes, 1 oversize flat file folder. )</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="351">
+      <subfield code="b">Series I: Clippings and Newsletters is arranged alphabetically by title where possible. Untitled items in this series are grouped by format with no chronological arrangement. 
+
+Series II: Correspondence and Advocacy is arranged chronologically.
+
+Series III: Objects and Ephemera is arranged alphabetically. 
+
+Series IV: Prints and Photographs is grouped by size. Small photographs, baseball cards, and slides are in a single binder with no arrangement. Oversize prints are foldered together with no arrangement and plaques are boxed with no arrangement. 
+
+Series V: Publications are grouped by format and arranged chronologically. 
+
+Series VI: Audiovisual items are not arranged.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="500">
+      <subfield code="a">Processing Information: For accession records see 2018-008 in the BHS repository and 2019-0048 in the BC repositiory. 
+
+
+The following artifacts have been removed from the collection and given to the Art and Artifacts Manager to process. Container extent and location will be updated when processing is complete:
+
+•	11 baseballs
+•	1 plastic container with dirt from Vero Beach, FL
+•	1 tin music box
+•	1 piece of wood from Ebbets Field in plastic holder
+•	2 blue fabric commemorative coin holders. One coin is missing. 
+•	Pins
+•	2 mousepads
+•	1 stamp
+•	1 small wood baseball bat
+•	1 Clem Labine patch
+•	1 Clem Labine good luck coin
+•	1 World Champions patch
+•	1 Ebbets Field puzzle 
+•	1 “Dem Bums” license plate holder
+•	1 LA Dodgers blue plastic hat
+•	1 wood Dodgers sign with easel 
+•	1 felt World Champions flag (9x12)
+•	1 Oct. 4, 1955 pin
+•	2 models of Ebbets Field
+•	1 ceramic mug
+•	1 shot glass
+•	1 Brooklyn Dodgers Fan on Board
+•	3 Dodgers pennants.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="500">
+      <subfield code="a">Materials Separated from the Resource: Books separated from the Constance D’Agosta Brooklyn Dodgers Collection and added to the Center for Brooklyn History non-circulating book collection. Consult the Brooklyn Public Library catalog for location. 
+
+Robins, Sharon. Promises Kept. Scholastic Press, 2004. 
+
+Enders, Eric. Ballparks Now and Then. Thunder Bay Press, 2002. 
+
+Rosenburg, John M. The Story of Baseball, A Completely Illustrated and Exciting History of America’s National Game. Random House, 1962.
+
+Langill, Mark. Dodger Stadium. Arcadia Publishing, 2004.
+
+Nordell, John R. Brooklyn Dodgers, The Last Great Pennant Drive, 1957. Tribute Books, 2007. 
+
+Parker, Robert B. Double Play. G.P. Putnam’s Sons, 2004. 
+
+Fredundlich, Larry. Reaching for the Stars. Ballantine Books, 2003. 
+
+Langill, Mark. Dodgertown. Arcadia Publishing, 2004. 
+
+Bavasi, Buzzie. Off the Record. Contemporary Books, Inc., 1987.
+
+Elliott, Richard. Clem Labine, Always a Dodger. Page Publishing, 2015. 
+
+Bennett, Bob; Bennet, John; Bennett, Robert S. Johnny Podres, Brooklyn’s Only Yankee Killer. Author House, 2005. 
+
+Smalling, Jack. The Baseball Autograph Collector’s Handbook. Baseball America, Inc., 2005.
+
+Allen, Maury. Brooklyn Remembered, the 1955 Days of the Dodgers. Sports Publishing L.L.C., 2005.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="506">
+      <subfield code="a">The collection may only be used in the library and is not available through interlibrary loan. Requests to view the collection must be made at least 48 hours in advance of visit.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="520">
+      <subfield code="a">This collection includes Brooklyn Dodgers memorabilia, clippings, ephemera, and photographs. Also included are the personal photographs and correspondence of Constance “Connie” D’Agosta, co-founder of the “Dodger Debs”.</subfield>
+    </datafield>
+    <datafield ind1="8" ind2=" " tag="524">
+      <subfield code="a">Identification of item/descriptive title, date (if known), Constance D’Agosta Brooklyn Dodgers Collection, CBHM_0001, Brooklyn Public Library, Center for Brooklyn History.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="540">
+      <subfield code="a">While many items in the Center for Brooklyn History are unrestricted, we do not own reproduction rights to all materials. Be aware of the several kinds of rights that might apply: copyright, licensing and trademarks. The researcher assumes all responsibility for copyright questions.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="541">
+      <subfield code="a">This collection was donated in part to the Brooklyn Historical Society in 2018. An additional donation was given to the Brooklyn Collection in 2019. Both gifts were provided by Joseph and Barbara D’Agosta.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="544">
+      <subfield code="n">Al Todres Brooklyn Dodgers Collection BCMS.0052
+
+Brooklyn Dodgers collection ARC.297
+
+Brooklyn Dodgers team photographs V1987.019
+
+Collection of Brooklyn Dodgers photographic portraits ARC.265
+
+Larry Trapani Brooklyn Dodgers collection 2005.037
+
+Stanley Person Baseball Collection BCMS.0065
+
+Walter O'Malley Brooklyn Dodgers records ARC.294.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="555">
+      <subfield code="a">Finding aid online:</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/cbhm_0001/</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Brooklyn Dodgers (Baseball team)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Baseball players |z New York (State) |z New York</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Baseball fans |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Ebbets Field (New York, N.Y.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Sports -- New York (State) -- Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Baseball teams |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Baseballs (ball)</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Scrapbooks</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Ephemera</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Clippings (information artifacts)</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="655">
+      <subfield code="a">Sports writing</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Photographic prints</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Memorabilia</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1="4" ind2="2" tag="856">
+      <subfield code="y">Finding aid online</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/cbhm_0001/</subfield>
+    </datafield>
+  </record>
+</collection>
+

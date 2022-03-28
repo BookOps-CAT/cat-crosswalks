@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <record>
+    <leader>00000npcaa2200000 u 4500</leader>
+    <controlfield tag="005">20210923140634.0</controlfield>
+    <controlfield tag="008">220127i19572013xxu                 eng d</controlfield>
+    <datafield ind1="7" ind2=" " tag="024">
+      <subfield code="a">()BCMS.0078</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1="" ind2="" tag="035">
+      <subfield code="a">()BCMS.0078-20210923</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="040">
+      <subfield code="b">eng</subfield>
+      <subfield code="e">Describing Archives: A Content Standard</subfield>
+    </datafield>
+    <datafield ind1="0" ind2=" " tag="041">
+      <subfield code="a">eng</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="099">
+      <subfield code="a">BCMS.0078</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="100">
+      <subfield code="a">Owens, Major R.</subfield>
+      <subfield code="q">(Major Robert Odell),</subfield>
+      <subfield code="e">creator.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2="0" tag="245">
+      <subfield code="a">Major Owens Collection,</subfield>
+      <subfield code="f">1957-2013.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="300">
+      <subfield code="a">30</subfield>
+      <subfield code="f">Linear Feet (in 13 record cartons, 2 oversize flat boxes, 2 document boxes, and 16 custom boxes in various sizes. )</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="351">
+      <subfield code="b">Series I: Writing is organized alphabetically by title, with rap poems, statements and blog posts appearing at the end. 
+
+Series II: Friends of Major Owens is organized alphabetically by topic, with the exception of “pins” which appear at the end of the series and oversize items, which are housed separately.
+
+Series III: Teaching is organized alphabetically by topic. 
+
+Series IV: Central Brooklyn Martin Luther King Commission is organized alphabetically by topic.
+
+Series V: Personal is organized alphabetically by topic. Programs are arranged chronologically, with oversized items housed separately. 
+
+Series VI: Congressional is organized alphabetically by topic.
+
+Series VII: Clippings are foldered chronologically, with the exception of articles concerning Louis Farrakhan, which are foldered separately and retain Owens’ original folder heading. Clippings originally housed in scrapbooks and with Owens’s Teaching and Martin Luther King Commission materials are housed with their respective series. 
+
+Series VIII: Photographs and Scrapbooks is arranged chronologically and by topic wherever possible. Scrapbook pages are foldered by book in original order. The bulk of photographs are unarranged and unlabeled. Binders 9 and 10 are duplicates. 
+
+Series IX: Audiovisual Materials is not arranged, however an item list is included in each box. 
+
+Series X: Awards are grouped by material and size, arranged chronologically. Larger and more delicate awards are housed separately in individual boxes.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="506">
+      <subfield code="a">Collection is located in the Center for Brooklyn History at the Central Branch at Grand Army Plaza. The collection may only be used in the library and is not available through interlibrary loan. Requests to view the collection must be made at least 48 hours in advance of visit.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="520">
+      <subfield code="a">Materials documenting the life and career of Congressman Major Owens (1936-2013), a Brooklyn based writer, educator, librarian and community organizer. Items include photographs, clippings, audiovisual materials, writing samples, congressional materials and correspondence.</subfield>
+    </datafield>
+    <datafield ind1="8" ind2=" " tag="524">
+      <subfield code="a">This collection should be cited as the Major Owens Collection, Brooklyn Public Library – Center for Brooklyn History.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="540">
+      <subfield code="a">While many items in the Center for Brooklyn History are unrestricted, we do not own reproduction rights to all materials. Be aware of the several kinds of rights that might apply: copyright, licensing and trademarks. The researcher assumes all responsibility for copyright questions.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="541">
+      <subfield code="a">This collection was donated by Maria Cuprill-Owens in 2019.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="544">
+      <subfield code="n"> Archival Collections: 
+
+ Arnie Goldwag Brooklyn Congress of Racial Equality (CORE) Collection 
+
+ Brooklyn For Peace records 
+
+ Eastern Parkway Coalition Records 
+
+ Rioghan Kirchner Civil Rights in Brooklyn Collection 
+
+ Oral History Collections:  
+
+ Bedford Stuyvesant Restoration Corporation Oral Histories 
+
+ Brian Purnell Civil Rights in Brooklyn Oral History Collection 
+
+ Voices of Crown Heights Oral Histories 
+
+ Books: 
+
+ Chisholm, Shirley. Unbought and unbossed. Houghton Mifflin, 1970. 
+
+ Pritchett, Wendell E. Brownsville, Brooklyn : Blacks, Jews, and the changing face of the ghetto. University of Chicago Press, 2002. 
+
+ Purnell, Brian. Fighting Jim Crow in the County of Kings : the Congress of Racial Equality in Brooklyn. University Press of Kentucky, 2013. 
+
+ Taxpayers guide to the politics of public education, Brooklyn. Brooklyn Education Task Force, 1979. 
+
+ Urban renewal in Brownsville ; the management of urban renewal in Brownsville area 15, 1960-1973. New York (State) State Study Commission for New York City Housing and Development Administration Study Group .</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="555">
+      <subfield code="a">Finding aid online:</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/bcms_0078</subfield>
+    </datafield>
+    <datafield ind1="2" ind2="0" tag="610">
+      <subfield code="a">Congressional Black Caucus</subfield>
+    </datafield>
+    <datafield ind1="2" ind2="0" tag="610">
+      <subfield code="a">Congress of Racial Equality</subfield>
+    </datafield>
+    <datafield ind1="2" ind2="0" tag="610">
+      <subfield code="a">City University of New York</subfield>
+      <subfield code="b">Medgar Evers College</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Legislators--New York (State)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">African Americans |x Civil rights |z New York (State) |z New York</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Brooklyn (New York, N.Y.)--Politics and government</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Community organization</subfield>
+      <subfield code="z">New York (State)</subfield>
+      <subfield code="z">Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Political campaigns -- New York (State) -- New York</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Authors, American</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Brownsville (New York, N.Y.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Crown Heights (New York, N.Y.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Prospect Heights (New York, N.Y.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Photographs</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Manuscripts (document genre)</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">VHS (TM)</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Scrapbooks</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1="4" ind2="2" tag="856">
+      <subfield code="y">Finding aid online</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/bcms_0078</subfield>
+    </datafield>
+  </record>
+</collection>
+

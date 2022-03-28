@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <record>
+    <leader>00000npcaa2200000 u 4500</leader>
+    <controlfield tag="003">NyBlHS</controlfield>
+    <controlfield tag="005">20220314144217.0</controlfield>
+    <controlfield tag="008">220314i19202011xx                  eng d</controlfield>
+    <datafield ind1="7" ind2=" " tag="024">
+      <subfield code="a">(NyBlHS)2019.004</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1="" ind2="" tag="035">
+      <subfield code="a">(NyBlHS)2019.004-20220314</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="040">
+      <subfield code="a">NyBlHS</subfield>
+      <subfield code="b">eng</subfield>
+      <subfield code="c">NyBlHS</subfield>
+    </datafield>
+    <datafield ind1="0" ind2=" " tag="041">
+      <subfield code="a">eng</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="099">
+      <subfield code="a">2019.004</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="100">
+      <subfield code="a">Hamm, Charles J. ,</subfield>
+      <subfield code="e">creator.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2="0" tag="245">
+      <subfield code="a">Charles Hamm Collection,</subfield>
+      <subfield code="f">1920-2011.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="300">
+      <subfield code="a">2.1</subfield>
+      <subfield code="f">Linear Feet (in 1 legal size document box, 1 oversize flat box, and 1 folder in flat file)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="351">
+      <subfield code="b">This collection is arranged in four series by type. Items in each series are not arranged.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="506">
+      <subfield code="a">Open to researchers without restriction.</subfield>
+    </datafield>
+    <datafield ind1="3" ind2=" " tag="520">
+      <subfield code="a">Materials documenting the life and career of Charles Hamm, an advertising executive, bank president and philanthropist. Photographs, awards, collected artwork and items concerning his mother, socialite Lisbeth Higgins Hamm are included.</subfield>
+    </datafield>
+    <datafield ind1="8" ind2=" " tag="524">
+      <subfield code="a">Identification of item/descriptive title, date (if known), Charles Hamm Collection, 2019.004, Brooklyn Public Library, Center for Brooklyn History.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="540">
+      <subfield code="a">While many items at the Center for Brooklyn History are unrestricted, we do not own reproduction rights to all materials. Be aware of the several kinds of rights that might apply: copyright, licensing and trademarks. The researcher assumes all responsibility for copyright questions.</subfield>
+    </datafield>
+    <datafield ind1="1" ind2=" " tag="541">
+      <subfield code="a">This collection was donated by Charles Hamm in 2019.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="544">
+      <subfield code="n">Brooklyn schools collection 1985.054
+
+Charles M. Higgins papers 1978.114
+
+The Packer Collegiate Institute records 2014.019.</subfield>
+    </datafield>
+    <datafield ind1=" " ind2=" " tag="555">
+      <subfield code="a">Finding aid online:</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/2019_004/</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Family life</subfield>
+      <subfield code="z">New York (State)</subfield>
+      <subfield code="z">Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Philanthropists |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Art</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Private schools |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Charities |z New York (State) |z New York</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Philanthropists |z New York (State) |z Kings County</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="0" tag="651">
+      <subfield code="a">Brooklyn Heights (New York, N.Y.)</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="651">
+      <subfield code="a">Brooklyn Heights Seminary (New York, N.Y.)</subfield>
+      <subfield code="2">local</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Photographs</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Maps</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1=" " ind2="7" tag="655">
+      <subfield code="a">Certificates</subfield>
+      <subfield code="2">aat</subfield>
+    </datafield>
+    <datafield ind1="4" ind2="2" tag="856">
+      <subfield code="y">Finding aid online</subfield>
+      <subfield code="u">http://dlib.nyu.edu/findingaids/html/bhs/2019_004/</subfield>
+    </datafield>
+  </record>
+</collection>
+
