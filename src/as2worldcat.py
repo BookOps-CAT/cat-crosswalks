@@ -52,7 +52,7 @@ def xml2marc(xmlfile: str) -> Record:
     Serializes MARC XML to pymarc `Record` object
     for manipulation
     """
-    with open(xmlfile, "r") as f:
+    with open(xmlfile, "r", encoding="utf-8") as f:
         reader = parse_xml_to_array(f)
         for record in reader:
             yield record
@@ -167,7 +167,7 @@ def get_token():
 
 if __name__ == "__main__":
 
-    marcxml = "./files/CBH/2019_004-marc.xml"
+    marcxml = "./files/CBH/bcms_0084-marc.xml"
     marcfile = f"{marcxml[:-4]}-PRC.mrc"
     reader = xml2marc(marcxml)
     for record in reader:
@@ -176,7 +176,7 @@ if __name__ == "__main__":
         save2marc(bib, marcfile)
 
     token = get_token()
-    with MetadataSession(authorization=token) as session:
+    with MetadataSession(authorization=token, timeout=10) as session:
         reader = marc2xml(marcfile)
         for record in reader:
             result = session.create_bib(inst="13437", instSymbol="BKL", xmldata=record)
