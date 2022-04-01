@@ -106,12 +106,8 @@ def norm_subfield_separator(s):
     if has_true_hyphen(s):
         warnings.warn(f"{s}", SuspiciousDataWarning)
 
-    s = (
-        s.replace(" - ", " -- ")
-        .replace("- ", "-- ")
-        .replace(" -", " --")
-        .replace("----", "--")
-    )
+    s, n = re.subn(r"\s-{1,}|-{1,}\s|-{2,}", "@", s)
+
     return s
 
 
@@ -120,7 +116,7 @@ def split_subject_elements(s):
     normalizes variation of separating subfields during data entry
     """
     s = norm_subfield_separator(s)
-    data = s.split("--")
+    data = s.split("@")
     return [e.strip() for e in data]
 
 
@@ -513,7 +509,7 @@ def make_bib(row: namedtuple, sequence: int):
 
     # 949 tag with Sierra commands
     tags.append(
-        Field(tag="949", indicators=[" ", " "], subfields=["a", "*b2=e;b3=a;bn=map"])
+        Field(tag="949", indicators=[" ", " "], subfields=["a", "*b2=e;b3=a;bn=map;"])
     )
 
     for t in tags:
@@ -539,6 +535,9 @@ def create_bibs(src_fh: str, out_fh: str, start_sequence: int):
 
 
 if __name__ == "__main__":
-    src_fh = "../files/pre 1900 Folded maps for inventory records - Sheet1.csv"
-    out_fh = "../files/folded_maps.mrc"
-    create_bibs(src_fh, out_fh, 1)
+    # remove the header row
+    src_fh = "./files/Maps/National Geographic Maps for inventory records.csv"
+    out_fh = "./files/Maps/folded-maps-220331-national-geo.mrc"
+
+    # check start sequence in NYPL Sierra
+    create_bibs(src_fh, out_fh, 830)
