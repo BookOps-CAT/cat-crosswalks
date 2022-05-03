@@ -502,14 +502,36 @@ def make_bib(row: namedtuple, sequence: int):
         )
 
     # tag 852
-    if row.t852:
-        tags.append(
-            Field(tag="852", indicators=["8", " "], subfields=["h", row.t852.strip()])
+    # the call number should have format: 852   $h Map Div. 21-12345
+    call_no = row.t852.strip()
+    if not call_no:
+        warnings.warn(f"{control_no} missing 852 tag", SuspiciousDataWarning)
+    elif "Map Div. " not in call_no:
+        warnings.warn(f"{control_no} has malformed call number", SuspiciousDataWarning)
+
+    if call_no:
+        tags.append(Field(tag="852", indicators=["8", " "], subfields=["h", call_no]))
+
+    # add 901 tag
+    tags.append(
+        Field(
+            tag="901",
+            indicators=[" ", " "],
+            subfields=[
+                "a",
+                "MAP DIV folded maps project",
+                "n",
+                f"{datetime.now():%Y%m%d}",
+            ],
         )
+    )
+
+    # add 910 tag for Research libraries
+    tags.append(Field(tag="910", indicators=[" ", " "], subfields=["a", "RL"]))
 
     # 949 tag with Sierra commands
     tags.append(
-        Field(tag="949", indicators=[" ", " "], subfields=["a", "*b2=e;b3=a;bn=map;"])
+        Field(tag="949", indicators=[" ", " "], subfields=["a", "*b2=e;b3=k;bn=map;"])
     )
 
     for t in tags:
