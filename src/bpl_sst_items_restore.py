@@ -97,6 +97,8 @@ def create_item_field(item: Item) -> Field:
             item.format.strip(),
             "t",
             item.item_type.strip(),
+            "n",
+            item.internal_note.strip(),
         ],
     )
 
