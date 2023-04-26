@@ -79,28 +79,25 @@ def get_price(price: str) -> str:
 
 def create_item_field(item: Item) -> Field:
     price = get_price(item.price.strip())
-    return Field(
-        tag="960",
-        indicators=[" ", " "],
-        subfields=[
-            "i",
-            item.barcode.strip(),
-            "l",
-            item.loc.strip(),
-            "p",
-            price,
-            "q",
-            item.stat_category.strip(),
-            "s",
-            "m",
-            "r",
-            item.format.strip(),
-            "t",
-            item.item_type.strip(),
-            "n",
-            item.internal_note.strip(),
-        ],
-    )
+    subfields = [
+        "i",
+        item.barcode.strip(),
+        "l",
+        item.loc.strip(),
+        "p",
+        price,
+        "q",
+        item.stat_category.strip(),
+        "s",
+        "m",
+        "r",
+        item.format.strip(),
+        "t",
+        item.item_type.strip(),
+    ]
+    if item.internal_note.strip():
+        subfields.extend(["n", item.internal_note.strip()])
+    return Field(tag="960", indicators=[" ", " "], subfields=subfields)
 
 
 def get_bibNos(src: str, out: str):
