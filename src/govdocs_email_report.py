@@ -3,12 +3,11 @@ from utils import save2csv
 
 def get_marcfile_name(value: str):
     pos = value.find(".errlog")
-    print(pos)
     name = value[14:pos]
     return name
 
 
-def parse_report(fh: str) -> tuple[list[tuple[str, str]]]:
+def parse_report(fh: str) -> tuple[str, list[tuple[str, str]]]:
     titles = []
     lines = []
     marcfile = ""
@@ -22,7 +21,7 @@ def parse_report(fh: str) -> tuple[list[tuple[str, str]]]:
     for line in lines:
         if "inserted /" in line:
             part1 = line[69:].strip()
-            block = line[8:13]
+            block = line[8:14]
             if "inserted /" not in lines[pos + 1]:
                 part2 = lines[pos + 1].strip()
             else:
@@ -45,5 +44,6 @@ def save_data(marcfile: str, data: list[tuple[str, str]], out: str) -> None:
 if __name__ == "__main__":
     fh = "src/files/GovDocs/private/FTS MAIL.eml"
     marcfile, titles = parse_report(fh)
+    print(f"Found {len(titles)} errors in the report.")
     out = f"src/files/GovDocs/private/{marcfile}.csv"
     save_data(marcfile, titles, out)
