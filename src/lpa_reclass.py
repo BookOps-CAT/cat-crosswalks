@@ -1,0 +1,152 @@
+import csv
+import json
+import os
+from typing import Union, Optional, Generator
+from urllib.parse import urlparse
+
+from bookops_sierra import SierraSession, SierraToken
+
+
+def connect2sierra():
+    fh = os.path.join(os.environ["USERPROFILE"], ".cred/.sierra/sierra-dev.json")
+    with open(fh, "r") as file:
+        cred = json.load(file)
+    token = SierraToken(
+        client_id=cred["client_id"],
+        client_secret=cred["client_secret"],
+        host_url=cred["host_url"],
+        agent="BOOKOPS/TESTS",
+    )
+    with SierraSession(authorization=token) as session:
+        return session
+
+
+def construct_subfields_for_lcc(value: str, special_cutter: bool) -> list[dict]:
+    if special_cutter:
+        subfield_h = value[: value.index(" ")].strip()
+        subfield_i = value[value.index(" ") :].strip()
+    else:
+        subfield_h = value[: value.index(".")].strip()
+        subfield_i = value[value.index(".") :].strip()
+
+    return [{"tag": "h", "content": subfield_h}, {"tag": "i", "content": subfield_i}]
+
+
+def get_bib(sid: Union[str, int], conn: SierraSession) -> dict:
+    res = conn.bib_get(sid, fields="varFields,items")
+    print(f"Server response code: {res.status_code}")
+
+    return res.json()
+
+
+def update_bib(sid: Union[str, int], data: dict, conn: SierraSession) -> None:
+    out = conn.bib_update(sid=sid, data=data, data_format="application/json")
+    print(f"Update response code: {out.status_code}")
+
+
+def is_callnumber_field(field: dict) -> bool:
+    try:
+        if field["marcTag"] == "852":
+            return True
+        else:
+            return False
+    except KeyError:
+        return False
+
+
+def get_callnumber(field: dict) -> Optional[str]:
+    try:
+        callnumber = field["subfields"][0]["content"].strip()
+    except (KeyError, IndexError):
+        return None
+    return callnumber
+
+
+def is_for_deletion(callnumber: str, classmarks4del: list[str]) -> bool:
+    print(callnumber, classmarks4del[0], callnumber in classmarks4del)
+    if callnumber in classmarks4del:
+        return True
+    else:
+        return False
+
+
+def new_classmarks(varFields: list[dict], classmarks4del: list[str]) -> list:
+    new_varFields = []
+    for f in varFields:
+        if is_callnumber_field(f):
+            callnumber = get_callnumber(f)
+            if is_for_deletion(callnumber, classmarks4del):
+                pass
+            else:
+                new_varFields.append(f)
+        else:
+            new_varFields.append(f)
+    return new_varFields
+
+
+def has_special_cutter(value: str) -> bool:
+    if "YES" in value.upper():
+        return True
+    else:
+        return False
+
+
+def get_reclass_data(fh: str) -> Generator[tuple[str, str], None, None]:
+    with open(fh, "r") as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)
+        for row in reader:
+            bibNo = row[1].strip()[1:-1]
+            spec_cutter = has_special_cutter(row[2])
+            lcc = row[3].strip()
+            yield (bibNo, spec_cutter, lcc)
+
+
+def construct_lcc(subfields: list[dict]) -> dict:
+    return {
+        "fieldTag": "q",
+        "marcTag": "852",
+        "ind1": "0",
+        "ind2": "1",
+        "subfields": subfields,
+    }
+
+
+def get_item_nos_from_bib_response(urls: list[str]) -> list[str]:
+    return [u.rsplit("/", 1)[-1] for u in urls]
+
+def get_items(sids: str, conn: SierraSession) -> list[dict]:
+    conn.
+
+
+def reclass(src_fh: str) -> None:
+    data = get_reclass_data(src_fh)
+    conn = connect2sierra()
+    for sid, spec_cutter, new_value in data:
+        bib = get_bib(sid, conn)
+        varFields = bib["varFields"]
+        itemNos = get_item_nos_from_bib_response(bib["items"])
+        items = get_items(itemNos.join(","), conn)
+
+        classmarks4del = determine_safe_to_delete_classmarks()
+
+        lcc_subfields = construct_subfields_for_lcc(new_value, spec_cutter)
+        new_lcc_field = construct_lcc(lcc_subfields)
+        new_varFields = new_classmarks(varFields, classmarks4del)
+        new_varFields.append(new_lcc_field)
+
+        # update item records
+        for item in items:
+            pass
+
+        # update bib record
+        data = {"varFields": new_varFields}
+        update_bib(sid, data, conn)
+
+
+if __name__ == "__main__":
+    data = get_reclass_data("src/files/LPALCReclass/LPAOpenShelfRef.csv")
+    sid = "13213996"
+    conn = connect2sierra()
+    bib = get_bib(sid, conn)
+    print(bib)
