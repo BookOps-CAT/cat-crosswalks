@@ -1,6 +1,10 @@
 import pytest
 
-from src.lpa_reclass import construct_subfields_for_lcc, get_item_nos_from_bib_response
+from src.lpa_reclass import (
+    construct_subfields_for_lcc,
+    get_subfield_contents,
+    get_item_nos_from_bib_response,
+)
 
 
 @pytest.mark.parametrize(
@@ -26,3 +30,23 @@ def test_get_item_nos_from_bib_response():
     assert get_item_nos_from_bib_response(
         ["https://nypl-sierra-test.iii.com/iii/sierra-api/v6/items/14381985"]
     ) == ["14381985"]
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        ({"subfields": []}, ""),
+        ({"subfields": [{"tag": "a", "content": "foo"}]}, "foo"),
+        (
+            {
+                "subfields": [
+                    {"tag": "a", "content": "foo"},
+                    {"tag": "b", "content": "bar"},
+                ]
+            },
+            "foo bar",
+        ),
+    ],
+)
+def test_get_subfield_contents(arg, expectation):
+    assert get_subfield_contents(arg) == expectation

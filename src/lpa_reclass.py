@@ -46,7 +46,7 @@ def update_bib(sid: Union[str, int], data: dict, conn: SierraSession) -> None:
 
 def is_callnumber_field(field: dict) -> bool:
     try:
-        if field["marcTag"] == "852":
+        if field["marcTag"] == "852" and field["fieldTag"] in ("c", "q"):
             return True
         else:
             return False
@@ -116,35 +116,71 @@ def get_item_nos_from_bib_response(urls: list[str]) -> list[str]:
     return [u.rsplit("/", 1)[-1] for u in urls]
 
 
+def get_subfield_contents(var_field: dict) -> str:
+    elements = []
+    for subfield in var_field["subfields"]:
+        elements.append(subfield["content"])
+    return " ".join(elements)
+
+
 def get_items(sids: str, conn: SierraSession) -> list[dict]:
-    items = []
+    # items = []
     res = conn.items_get(sids=sids, fields="location,varFields")
-    entries = res.json()["entries"]
+    items = res.json()["entries"]
     # print(entries)
-    for e in entries:
-        location = e["location"]["code"]
-        for f in e["varFields"]:
-            if f["fieldTag"] == "c" and f["marcTag"] == "852":
-                items.append(
-                    {
-                        "id": e["id"],
-                        "location": location,
-                        "callnum": f["subfields"][0]["content"],
-                    }
-                )
+    # for e in entries:
+    # location = e["location"]["code"]
+    # for f in e["varFields"]:
+    #     if f["fieldTag"] == "c" and f["marcTag"] == "852":
+    #         items.append(
+    #             {
+    #                 "id": e["id"],
+    #                 "location": location,
+    #                 "callnum": f["subfields"][0]["content"],
+    #             }
+    #         )
     return items
 
 
-def update_item(sid: str, lcc: str, conn: SierraSession) -> int:
-    data = {
+def change_varFields(item: dict, lcc: str, lcc_cutter: str) -> list[dict]:
+    new_varFields = []
+    varFields = item["varFields"]
+    for f in varFields:
+        if f["fieldTag"] == "c" and f["marcTag"] == "852":
+            callnum = item_callnum_field(lcc, lcc_cutter)
+            new_varFields.append(callnum)
+        else:
+            new_varFields.append(f)
+    return new_varFields
+
+
+def item_callnum_field(lcc: str, lcc_cutter: str) -> dict:
+    return {
         "fieldTag": "c",
         "marcTag": "852",
         "ind1": "0",
         "ind2": "1",
-        "subfields": [{"tag": "h", "content": lcc}],
+        "subfields": [
+            {"tag": "h", "content": lcc},
+            {"tag": "i", "content": lcc_cutter},
+        ],
     }
-    res = conn.item_update(sid=sid, data=data)
-    return res.status_code
+
+
+# def get_other_classmarks(items: dict) -> set[str]:
+#     classmarks = []
+#     for i in items:
+#         if i["location"]["code"] not in ("pam11", "pah11"):
+#             for f in i["varFields"]:
+
+#             classmarks.add()
+
+
+def determine_save_to_delete_classmarks(bib_varFields: dict, items: dict) -> list[str]:
+    # classmarks belonging to other locations
+    other_classmarks = get_other_classmarks(items)
+    # classmarks unique to pam11 & pah11
+    ref_classmarks = get_ref_classmarks(itmes)
 
 
 def reclass(src_fh: str) -> None:
@@ -152,23 +188,24 @@ def reclass(src_fh: str) -> None:
     conn = connect2sierra()
     for sid, spec_cutter, new_value in data:
         bib = get_bib(sid, conn)
-        varFields = bib["varFields"]
+        bib_varFields = bib["varFields"]
         itemNos = get_item_nos_from_bib_response(bib["items"])
-        items = get_items(itemNos.join(","), conn)
+        itemsNos_str = get_items(",".join(itemNos), conn)
+        items = get_items(sids=itemNos_str, conn=conn)
 
         classmarks4del = determine_safe_to_delete_classmarks()
 
         lcc_subfields = construct_subfields_for_lcc(new_value, spec_cutter)
         new_lcc_field = construct_lcc(lcc_subfields)
-        new_varFields = new_classmarks(varFields, classmarks4del)
-        new_varFields.append(new_lcc_field)
+        bib_new_varFields = new_classmarks(bib_varFields, classmarks4del)
+        bib_new_varFields.append(new_lcc_field)
 
         # update item records
         for item in items:
             pass
 
         # update bib record
-        data = {"varFields": new_varFields}
+        data = {"varFields": bib_new_varFields}
         update_bib(sid, data, conn)
 
 
@@ -179,5 +216,9 @@ if __name__ == "__main__":
     conn = connect2sierra()
     # bib = get_bib(sid, conn)
     # print(bib)
-    res = get_items(sids="13213996", conn=conn)
-    print(res)
+    items = get_items(sids="13213996", conn=conn)
+    for item in items:
+        new_varFields = change_varFields(item, "AI3", ".M4")
+        new_data = {"varFields": new_varFields}
+        # res = conn.item_update(sid=item["id"], data=new_data)
+        # print(f"item {item["id"]}: {res.status_code}")
