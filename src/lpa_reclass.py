@@ -91,7 +91,7 @@ def has_special_cutter(value: str) -> bool:
         return False
 
 
-def get_reclass_data(fh: str) -> Generator[tuple[str, str], None, None]:
+def get_reclass_data(fh: str) -> Generator[tuple[str, bool, str], None, None]:
     with open(fh, "r") as csvfile:
         reader = csv.reader(csvfile)
         next(reader)
@@ -115,8 +115,36 @@ def construct_lcc(subfields: list[dict]) -> dict:
 def get_item_nos_from_bib_response(urls: list[str]) -> list[str]:
     return [u.rsplit("/", 1)[-1] for u in urls]
 
+
 def get_items(sids: str, conn: SierraSession) -> list[dict]:
-    conn.
+    items = []
+    res = conn.items_get(sids=sids, fields="location,varFields")
+    entries = res.json()["entries"]
+    # print(entries)
+    for e in entries:
+        location = e["location"]["code"]
+        for f in e["varFields"]:
+            if f["fieldTag"] == "c" and f["marcTag"] == "852":
+                items.append(
+                    {
+                        "id": e["id"],
+                        "location": location,
+                        "callnum": f["subfields"][0]["content"],
+                    }
+                )
+    return items
+
+
+def update_item(sid: str, lcc: str, conn: SierraSession) -> int:
+    data = {
+        "fieldTag": "c",
+        "marcTag": "852",
+        "ind1": "0",
+        "ind2": "1",
+        "subfields": [{"tag": "h", "content": lcc}],
+    }
+    res = conn.item_update(sid=sid, data=data)
+    return res.status_code
 
 
 def reclass(src_fh: str) -> None:
@@ -145,8 +173,11 @@ def reclass(src_fh: str) -> None:
 
 
 if __name__ == "__main__":
+    # {'fieldTag': 'c', 'marcTag': '852', 'ind1': '8', 'ind2': ' ', 'subfields': [{'tag': 'h', 'content': 'JFD 92-6213'}]}
     data = get_reclass_data("src/files/LPALCReclass/LPAOpenShelfRef.csv")
     sid = "13213996"
     conn = connect2sierra()
-    bib = get_bib(sid, conn)
-    print(bib)
+    # bib = get_bib(sid, conn)
+    # print(bib)
+    res = get_items(sids="13213996", conn=conn)
+    print(res)
