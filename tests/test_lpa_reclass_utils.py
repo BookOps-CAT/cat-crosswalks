@@ -2,7 +2,7 @@ import pytest
 
 from src.lpa_reclass_utils import (
     construct_subfields_for_lcc,
-    get_subfield_contents,
+    get_callnumber,
     get_item_nos_from_bib_response,
     normalize_callnumber,
 )
@@ -49,8 +49,8 @@ def test_get_item_nos_from_bib_response():
         ),
     ],
 )
-def test_get_subfield_contents(arg, expectation):
-    assert get_subfield_contents(arg) == expectation
+def test_get_callnumber(arg, expectation):
+    assert get_callnumber(arg) == expectation
 
 
 @pytest.mark.parametrize(

@@ -115,9 +115,9 @@ def construct_subfields_for_lcc(value: str, special_cutter: bool) -> list[dict]:
 
 
 def determine_save_to_delete_callnumbers(items: dict) -> set[str]:
-    # classmarks belonging to other locations
+    # callnumber belonging to other locations
     other_callnumbers = get_other_item_callnumbers(items)
-    # classmarks unique to pam11 & pah11
+    # callnumber unique to pam11 & pah11
     ref_callnumbers = get_ref_item_callnumbers(items)
 
     callnumbers4del = set()
@@ -129,24 +129,21 @@ def determine_save_to_delete_callnumbers(items: dict) -> set[str]:
 
 
 def get_bib_callnumber(bib: dict) -> set[str]:
-    pass
+    callnumbers = set()
+    for f in bib["varFields"]:
+        if is_callnumber_field(f):
+            callnumber = get_callnumber(f)
+            callnumbers.add(callnumber)
+    return callnumbers
 
 
-def get_callnumber(field: dict) -> Optional[str]:
-    try:
-        callnumber = field["subfields"][0]["content"].strip()
-    except (KeyError, IndexError):
-        return None
-    return callnumber
-
-
-def get_other_item_callnumbers(items: dict) -> set[str]:
+def get_other_item_callnumbers(items: dict, item_loc: str) -> set[str]:
     callnumbers = set()
     for i in items:
         if not is_lpa_ref_location(i):
             for f in i["varFields"]:
                 if is_callnumber_field(f):
-                    callnumber = get_subfield_contents(f)
+                    callnumber = get_callnumber(f)
                     callnumbers.add(callnumber)
     return callnumbers
 
@@ -157,12 +154,12 @@ def get_ref_item_callnumbers(items: dict) -> set[str]:
         if is_lpa_ref_location(i):
             for f in i["varFields"]:
                 if is_callnumber_field(f):
-                    callnumber = get_subfield_contents(f)
+                    callnumber = get_callnumber(f)
                     callnumbers.add(callnumber)
     return callnumbers
 
 
-def get_subfield_contents(var_field: dict) -> str:
+def get_callnumber(var_field: dict) -> str:
     elements = []
     try:
         for subfield in var_field["subfields"]:
