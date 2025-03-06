@@ -3,6 +3,7 @@ from lpa_reclass_utils import (
     connect2sierra,
     construct_subfields_for_lcc,
     construct_lcc_field,
+    determine_safe_to_delete_callnumbers,
     get_reclass_data,
     get_bib,
     get_item_nos_from_bib_response,
@@ -15,16 +16,17 @@ def reclass(src_fh: str) -> None:
     data = get_reclass_data(src_fh)
     conn = connect2sierra()
     for sid, spec_cutter, new_value in data:
+        # get bib data
         bib = get_bib(sid, conn)
         bib_varFields = bib["varFields"]
-        itemNos = get_item_nos_from_bib_response(bib["items"])
 
-        # ?
-        itemNos_str = get_items(",".join(itemNos), conn)
+        # get item data
+        itemNos = get_item_nos_from_bib_response(bib["items"])
+        itemNos_str = ",".join(itemNos)
         items = get_items(sids=itemNos_str, conn=conn)
 
         classmark_lookup = create_classmark_lookup()
-        classmarks4del = determine_safe_to_delete_classmarks()
+        classmarks4del = determine_safe_to_delete_callnumbers(items)
 
         lcc_subfields = construct_subfields_for_lcc(new_value, spec_cutter)
         new_lcc_field = construct_lcc_field(lcc_subfields)

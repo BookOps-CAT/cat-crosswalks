@@ -114,7 +114,7 @@ def construct_subfields_for_lcc(value: str, special_cutter: bool) -> list[dict]:
     return [{"tag": "h", "content": subfield_h}, {"tag": "i", "content": subfield_i}]
 
 
-def determine_save_to_delete_callnumbers(items: dict) -> set[str]:
+def determine_safe_to_delete_callnumbers(items: list[dict]) -> set[str]:
     # callnumber belonging to other locations
     other_callnumbers = get_other_item_callnumbers(items)
     # callnumber unique to pam11 & pah11
@@ -137,7 +137,7 @@ def get_bib_callnumber(bib: dict) -> set[str]:
     return callnumbers
 
 
-def get_other_item_callnumbers(items: dict, item_loc: str) -> set[str]:
+def get_other_item_callnumbers(items: list[dict]) -> set[str]:
     callnumbers = set()
     for i in items:
         if not is_lpa_ref_location(i):
@@ -148,7 +148,7 @@ def get_other_item_callnumbers(items: dict, item_loc: str) -> set[str]:
     return callnumbers
 
 
-def get_ref_item_callnumbers(items: dict) -> set[str]:
+def get_ref_item_callnumbers(items: list[dict]) -> set[str]:
     callnumbers = set()
     for i in items:
         if is_lpa_ref_location(i):
