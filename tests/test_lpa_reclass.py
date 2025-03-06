@@ -4,6 +4,7 @@ from src.lpa_reclass import (
     construct_subfields_for_lcc,
     get_subfield_contents,
     get_item_nos_from_bib_response,
+    normalize_callnumer,
 )
 
 
@@ -50,3 +51,14 @@ def test_get_item_nos_from_bib_response():
 )
 def test_get_subfield_contents(arg, expectation):
     assert get_subfield_contents(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        (' *FOO bar .,()"baz +" ', "*FOO bar baz +"),
+        (" *ZP-*PYO+ n.c. 2, no. 7 ", "*ZP*PYO+ nc 2 no 7"),
+    ],
+)
+def test_normalize_callnumer(arg, expectation):
+    assert normalize_callnumer(arg) == expectation

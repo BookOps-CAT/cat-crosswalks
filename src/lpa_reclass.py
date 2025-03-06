@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+import re
 from typing import Union, Optional, Generator
 from urllib.parse import urlparse
 
@@ -116,29 +117,25 @@ def get_item_nos_from_bib_response(urls: list[str]) -> list[str]:
     return [u.rsplit("/", 1)[-1] for u in urls]
 
 
+def normalize_callnumer(value: str) -> str:
+    norm_value = re.sub(r'\.|,|\(|\)|"|-', "", value).strip()
+    return norm_value
+
+
 def get_subfield_contents(var_field: dict) -> str:
     elements = []
-    for subfield in var_field["subfields"]:
-        elements.append(subfield["content"])
+    try:
+        for subfield in var_field["subfields"]:
+            norm_content = normalize_callnum(subfield["content"])
+            elements.append(norm_content)
+    except KeyError:
+        pass
     return " ".join(elements)
 
 
 def get_items(sids: str, conn: SierraSession) -> list[dict]:
-    # items = []
     res = conn.items_get(sids=sids, fields="location,varFields")
     items = res.json()["entries"]
-    # print(entries)
-    # for e in entries:
-    # location = e["location"]["code"]
-    # for f in e["varFields"]:
-    #     if f["fieldTag"] == "c" and f["marcTag"] == "852":
-    #         items.append(
-    #             {
-    #                 "id": e["id"],
-    #                 "location": location,
-    #                 "callnum": f["subfields"][0]["content"],
-    #             }
-    #         )
     return items
 
 
@@ -147,14 +144,14 @@ def change_varFields(item: dict, lcc: str, lcc_cutter: str) -> list[dict]:
     varFields = item["varFields"]
     for f in varFields:
         if f["fieldTag"] == "c" and f["marcTag"] == "852":
-            callnum = item_callnum_field(lcc, lcc_cutter)
+            callnum = construct_item_callnum_field(lcc, lcc_cutter)
             new_varFields.append(callnum)
         else:
             new_varFields.append(f)
     return new_varFields
 
 
-def item_callnum_field(lcc: str, lcc_cutter: str) -> dict:
+def construct_item_callnum_field(lcc: str, lcc_cutter: str) -> dict:
     return {
         "fieldTag": "c",
         "marcTag": "852",
@@ -167,20 +164,54 @@ def item_callnum_field(lcc: str, lcc_cutter: str) -> dict:
     }
 
 
-# def get_other_classmarks(items: dict) -> set[str]:
-#     classmarks = []
-#     for i in items:
-#         if i["location"]["code"] not in ("pam11", "pah11"):
-#             for f in i["varFields"]:
+def is_lpa_ref_location(item: dict) -> bool:
+    try:
+        if item["location"]["code"] in ("pam11", "pah11"):
+            return True
+        else:
+            return False
+    except KeyError:
+        return False
 
-#             classmarks.add()
+
+def get_other_item_classmarks(items: dict) -> set[str]:
+    classmarks = set()
+    for i in items:
+        if not is_lpa_ref_location(i):
+            for f in i["varFields"]:
+                if is_callnumber_field(f):
+                    callnumber = get_subfield_contents(f)
+                    classmarks.add(callnumber)
+    return classmarks
 
 
-def determine_save_to_delete_classmarks(bib_varFields: dict, items: dict) -> list[str]:
+def get_ref_item_classmarks(items: dict) -> set[str]:
+    classmarks = set()
+    for i in items:
+        if is_lpa_ref_location(i):
+            for f in i["varFields"]:
+                if is_callnumber_field(f):
+                    callnumber = get_subfield_contents(f)
+                    classmarks.add(callnumber)
+    return classmarks
+
+
+def determine_save_to_delete_classmarks(items: dict) -> set[str]:
     # classmarks belonging to other locations
-    other_classmarks = get_other_classmarks(items)
+    other_classmarks = get_other_item_classmarks(items)
     # classmarks unique to pam11 & pah11
-    ref_classmarks = get_ref_classmarks(itmes)
+    ref_classmarks = get_ref_item_classmarks(items)
+
+    classmarks4del = set()
+    for classmark in ref_classmarks:
+        if classmark not in other_classmarks:
+            classmarks4del.add(classmark)
+
+    return classmarks4del
+
+
+def get_bib_classmarks(bib: dict) -> set[str]:
+    pass
 
 
 def reclass(src_fh: str) -> None:
@@ -190,9 +221,10 @@ def reclass(src_fh: str) -> None:
         bib = get_bib(sid, conn)
         bib_varFields = bib["varFields"]
         itemNos = get_item_nos_from_bib_response(bib["items"])
-        itemsNos_str = get_items(",".join(itemNos), conn)
+        itemNos_str = get_items(",".join(itemNos), conn)
         items = get_items(sids=itemNos_str, conn=conn)
 
+        classmark_lookup = create_classmark_lookup()
         classmarks4del = determine_safe_to_delete_classmarks()
 
         lcc_subfields = construct_subfields_for_lcc(new_value, spec_cutter)
@@ -202,7 +234,9 @@ def reclass(src_fh: str) -> None:
 
         # update item records
         for item in items:
-            pass
+            new_varFields = change_varFields(item, "AI3", ".M4")
+            new_data = {"varFields": new_varFields}
+            # res = conn.item_update(sid=item["id"], data=new_data)
 
         # update bib record
         data = {"varFields": bib_new_varFields}
