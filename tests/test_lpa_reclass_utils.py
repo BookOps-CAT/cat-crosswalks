@@ -1,6 +1,7 @@
 import pytest
 
 from src.lpa_reclass_utils import (
+    construct_item_internal_note,
     construct_subfields_for_lcc,
     get_callnumber,
     get_item_nos_from_bib_response,
@@ -62,3 +63,16 @@ def test_get_callnumber(arg, expectation):
 )
 def test_normalize_callnumer(arg, expectation):
     assert normalize_callnumber(arg) == expectation
+
+
+def test_temp():
+    from src.lpa_reclass_utils import connect2sierra, get_items
+
+    sid = "32153977"
+    conn = connect2sierra()
+    res = get_items(sid, conn)
+    print(res)
+
+
+def test_construct_item_internal_note():
+    print(construct_item_internal_note("Foo"))
