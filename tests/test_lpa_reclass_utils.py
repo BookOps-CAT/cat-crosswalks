@@ -3,6 +3,7 @@ from datetime import datetime
 import pytest
 
 from src.lpa_reclass_utils import (
+    MultiCallNumError,
     change_item_varFields,
     construct_item_internal_note,
     construct_subfields_for_lcc,
@@ -60,7 +61,7 @@ def test_change_item_varFields_with_existing_callnumber():
         "subfields": [{"tag": "h", "content": "FOO"}, {"tag": "i", "content": "BAR"}],
     }
     res = change_item_varFields(item=item, callnumber_field=new_callnumber_field)
-    new_fields = item["varFields"]
+    new_fields = item["varFields"][:1]  # remove old callnumber
     internal_note = {
         "fieldTag": "x",
         "content": f"Reclassified by CAT/mus, {datetime.now():%Y-%m-%d} (former classmark: {old_callnumber})",
@@ -68,6 +69,98 @@ def test_change_item_varFields_with_existing_callnumber():
     new_fields.append(new_callnumber_field)
     new_fields.append(internal_note)
     assert res == new_fields
+
+
+def test_change_item_varFields_without_any_varFields():
+    item = {
+        "id": "12345678",
+        "varFields": [],
+    }
+    new_callnumber_field = {
+        "fieldTag": "c",
+        "marcTag": "852",
+        "ind1": "0",
+        "ind2": "1",
+        "subfields": [{"tag": "h", "content": "FOO"}, {"tag": "i", "content": "BAR"}],
+    }
+    res = change_item_varFields(item=item, callnumber_field=new_callnumber_field)
+    new_fields = []
+    internal_note = {
+        "fieldTag": "x",
+        "content": f"Reclassified by CAT/mus, {datetime.now():%Y-%m-%d} (former classmark: MISSING on item)",
+    }
+    new_fields.append(new_callnumber_field)
+    new_fields.append(internal_note)
+    assert res == new_fields
+
+
+def test_change_item_varFields_with_multiple_callnumber_fields():
+    old_callnumber1 = "SPAM1"
+    old_callnumber2 = "SPAM2"
+    item = {
+        "id": "12345678",
+        "varFields": [
+            {"fieldTag": "b", "content": "33433006540185"},
+            {
+                "fieldTag": "c",
+                "marcTag": "852",
+                "ind1": "8",
+                "ind2": " ",
+                "subfields": [{"tag": "h", "content": old_callnumber1}],
+            },
+            {
+                "fieldTag": "c",
+                "marcTag": "852",
+                "ind1": "8",
+                "ind2": " ",
+                "subfields": [{"tag": "h", "content": old_callnumber2}],
+            },
+        ],
+    }
+    new_callnumber_field = {
+        "fieldTag": "c",
+        "marcTag": "852",
+        "ind1": "0",
+        "ind2": "1",
+        "subfields": [{"tag": "h", "content": "FOO"}, {"tag": "i", "content": "BAR"}],
+    }
+
+    with pytest.raises(MultiCallNumError):
+        change_item_varFields(item=item, callnumber_field=new_callnumber_field)
+
+
+def test_construct_item_internal_note():
+    old_callnumber = "FOO"
+    assert construct_item_internal_note(olc_callnumber) == {
+        "fieldTag": "x",
+        "content": f"Reclassified by CAT/mus, {datetime.now():%Y-%m-%d} (former classmark: {old_callnumber})",
+    }
+
+
+def construct_lcc_field():
+    field_tag = "c"
+    subfields = [{"tag": "h", "content": "FOO"}, {"tag": "i", "content": "BAR"}]
+    assert construct_lcc_field(subfields, field_tag) == {
+        "fieldTag": fieldTag,
+        "marcTag": "852",
+        "ind1": "0",
+        "ind2": "1",
+        "subfields": subfields,
+    }
+
+
+@pytest.mark.parametrize(
+    "arg1,arg2",
+    [
+        (None, "a"),
+        ("foo", "a"),
+        ([{"tag": "h", "content": "FOO"}], None),
+        ([{"tag": "h", "content": "FOO"}], []),
+    ],
+)
+def construct_lcc_field_exceptions(arg1, arg2):
+    with pytest.raises(TypeError):
+        construct_lcc_field(subfields=arg1, fieldTag=arg2)
 
 
 @pytest.mark.parametrize(

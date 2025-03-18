@@ -8,6 +8,10 @@ from typing import Union, Generator
 from bookops_sierra import SierraSession, SierraToken
 
 
+class MultiCallNumError(Exception):
+    pass
+
+
 # SOURCE DATA
 def get_reclass_data(fh: str) -> Generator[tuple[str, bool, str], None, None]:
     with open(fh, "r") as csvfile:
@@ -71,20 +75,30 @@ def update_bib(sid: Union[str, int], data: dict, conn: SierraSession) -> int:
 
 
 def change_item_varFields(item: dict, callnumber_field: dict) -> list[dict]:
-    new_varFields = []
-    varFields = item["varFields"]
+    """
+    Returns updated with LCC item varFields
+    """
+    new_varFields: list[dict] = []
     field_added = False
-    for f in varFields:
-        if is_callnumber_field(f):
+    for f in item["varFields"]:
+        if is_callnumber_field(f) and not field_added:
+            # replace existing call number field
             old_callnumber = get_callnumber(f)
-            new_varFields.append(callnumber_field)
             internal_note = construct_item_internal_note(old_callnumber)
             field_added = True
+        elif is_callnumber_field(f) and field_added:
+            # multiple call number fields encountered!
+            # manual corrections needed
+            raise MultiCallNumError
         else:
+            # keep any not relevant existing fields
             new_varFields.append(f)
+
+    # add if no call number field present
     if not field_added:
-        new_varFields.append(callnumber_field)
         internal_note = construct_item_internal_note("MISSING on item")
+
+    new_varFields.append(callnumber_field)
     new_varFields.append(internal_note)
     return new_varFields
 
@@ -97,6 +111,10 @@ def construct_item_internal_note(value: str):
 
 
 def construct_lcc_field(subfields: list[dict], fieldTag: str) -> dict:
+    if not isinstance(subfields, list):
+        raise TypeError("Invalid subfields param. Must be a list of dict.")
+    if not isinstance(fieldTag, str):
+        raise TypeError("Invalid fieldTag param. Must be a str.")
     return {
         "fieldTag": fieldTag,
         "marcTag": "852",
