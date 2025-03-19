@@ -186,7 +186,6 @@ def get_other_item_callnumbers(items: list[dict]) -> set[str]:
                     callnumbers.add(norm_callnumber)
     return callnumbers
 
-
 def get_ref_item_callnumbers(items: list[dict]) -> set[str]:
     callnumbers = set()
     for i in items:

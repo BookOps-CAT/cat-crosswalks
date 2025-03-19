@@ -7,10 +7,14 @@ from src.lpa_reclass_utils import (
     change_item_varFields,
     construct_item_internal_note,
     construct_subfields_for_lcc,
+    determine_safe_to_delete_item_callnumbers,
+    get_bib_callnumber,
     get_callnumber,
     get_item_nos_from_bib_response,
+    get_other_item_callnumbers,
     has_special_cutter,
     is_callnumber_field,
+    is_lpa_ref_location,
     normalize_callnumber,
 )
 
@@ -182,10 +186,49 @@ def test_construct_subfields_for_lcc(arg1, arg2, expectation):
     assert construct_subfields_for_lcc(arg1, arg2) == expectation
 
 
+def test_determine_safe_to_detete_item_callnumbers():
+    pass
+
+
+def test_get_bibcallnumber(stub_bib_as_json):
+    assert get_bib_callnumber(stub_bib_as_json) == {"FOO BAR SPAM", "BAZ QUX"}
+
+
 def test_get_item_nos_from_bib_response():
     assert get_item_nos_from_bib_response(
         ["https://nypl-sierra-test.iii.com/iii/sierra-api/v6/items/14381985"]
     ) == ["14381985"]
+
+
+def test_get_other_item_callnumbers_not_present(stub_item):
+    items = [stub_item]
+    assert get_other_item_callnumbers(items) == {""}
+
+
+def test_get_other_item_callnumbers_present(stub_item):
+    second_item = stub_item.copy()
+    second_item["barcode"] = ("33433064168457",)
+    second_item["location"] = {"code": "rcmb8", "name": "OFF SITE"}
+    second_item["fixedFields"] = [
+        {
+            "label": "LOCATION",
+            "number": 79,
+            "value": "rcmb8",
+            "display": "OFF SITE",
+        },
+    ]
+    second_item["varFields"] = [
+        {"fieldTag": "b", "content": "33433064168457"},
+        {
+            "fieldTag": "c",
+            "marcTag": "852",
+            "ind1": "8",
+            "ind2": " ",
+            "content": [{"tag": "h", "content": "BAZ"}],
+        },
+    ]
+    items = [stub_item, second_item]
+    assert get_other_item_callnumbers(items) == {"BAZ"}
 
 
 @pytest.mark.parametrize(
@@ -272,8 +315,20 @@ def test_has_special_cutter(arg, expectation):
         ),
     ],
 )
-def is_callnumber_field(arg, expectation):
+def test_is_callnumber_field(arg, expectation):
     assert is_callnumber_field(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "fixture_name,expectation",
+    [
+        ("stub_lpa_item", True),
+        ("stub_other_item", False),
+    ],
+)
+def test_is_lpa_ref_location(request, fixture_name, expectation):
+    arg = request.getfixturevalue(fixture_name)
+    assert is_lpa_ref_location(arg) == expectation
 
 
 @pytest.mark.parametrize(
@@ -287,13 +342,13 @@ def test_normalize_callnumer(arg, expectation):
     assert normalize_callnumber(arg) == expectation
 
 
-def test_temp():
-    from src.lpa_reclass_utils import connect2sierra, get_items
+# def test_temp():
+#     from src.lpa_reclass_utils import connect2sierra, get_items
 
-    sid = "32153977"
-    conn = connect2sierra()
-    res = get_items(sid, conn)
-    # print(res)
+#     sid = "32153977"
+#     conn = connect2sierra()
+#     res = get_items(sid, conn)
+# print(res)
 
 
 def test_construct_item_internal_note():
