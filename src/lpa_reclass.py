@@ -3,6 +3,7 @@ from datetime import datetime
 from bookops_sierra.errors import BookopsSierraError
 
 from lpa_reclass_utils import (
+    MultiCallNumError,
     change_item_varFields,
     connect2sierra,
     construct_subfields_for_lcc,
@@ -28,6 +29,7 @@ def reclass(src_fh: str) -> None:
     src_data = get_reclass_data(src_fh)
     log_fh = "src/files/LPALCReclass/LPAReclas-log.csv"
     save2csv(log_fh, ["timestamp", "bibNo", "lcc", "items updated"])
+    errors_fh = "src/files/LPALCReclass/LPAReclass-errors.csv"
     conn = connect2sierra()
     row = 0
     for sid, spec_cutter, lcc in src_data:
@@ -65,9 +67,17 @@ def reclass(src_fh: str) -> None:
         item_update_count = 0
         items_updated = []
         timestamp = datetime.now()
+
         for item in retrieved_items:
             if is_lpa_ref_location(item):
-                new_varFields = change_item_varFields(item, new_lcc_item_field)
+
+                try:
+                    new_varFields = change_item_varFields(item, new_lcc_item_field)
+                except MultiCallNumError:
+                    print(f"MultiCallnumberError: b{sid}a")
+                    save2csv(errors_fh, [sid, item["id"]])
+                    continue
+
                 new_item_data = {"varFields": new_varFields}
                 res = conn.item_update(sid=item["id"], data=new_item_data)
                 print(f"Update item request:{res.url}")
