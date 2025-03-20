@@ -15,29 +15,28 @@ from lpa_reclass_utils import (
     get_item_nos_from_bib_response,
     get_items,
     is_lpa_ref_location,
-    update_bib_varFields,
+    split_into_batches,
+    cleanup_bib_varFields,
     update_bib,
 )
 from utils import save2csv
 
 
-def split_into_batches(lst: list[str], batch_size=5) -> list[list[str]]:
-    return [lst[i : i + batch_size] for i in range(0, len(lst), batch_size)]
-
-
 def reclass(src_fh: str) -> None:
     src_data = get_reclass_data(src_fh)
     log_fh = "src/files/LPALCReclass/LPAReclas-log.csv"
-    save2csv(log_fh, ["timestamp", "bibNo", "lcc", "items updated"])
+    save2csv(log_fh, ["timestamp", "bibNo", "lcc", "items updated", "elapsed_time"])
     errors_fh = "src/files/LPALCReclass/LPAReclass-errors.csv"
     conn = connect2sierra()
     row = 0
     for sid, spec_cutter, lcc in src_data:
         # get Sierra bib data
+        timestamp = datetime.now()
         try:
             bib = get_bib(sid, conn)
         except BookopsSierraError:
             print(f"BIB NOT FOUND: b{sid}a")
+            save2csv(log_fh, [timestamp, sid, lcc, "ERROR-BIB NOT FOUND"])
             continue
 
         bib_varFields = bib["varFields"]
@@ -56,23 +55,18 @@ def reclass(src_fh: str) -> None:
         print(f"Callnumbers4del: {callnumbers4del}")
 
         lcc_subfields = construct_subfields_for_lcc(lcc, spec_cutter)
-        new_lcc_bib_field = construct_lcc_field(lcc_subfields, fieldTag="q")
-        bib_new_varFields = update_bib_varFields(
-            bib_varFields, callnumbers4del, other_loc_callnumbers
-        )
-        bib_new_varFields.append(new_lcc_bib_field)
 
         # update LPA REF item records
         new_lcc_item_field = construct_lcc_field(lcc_subfields, fieldTag="c")
         item_update_count = 0
         items_updated = []
-        timestamp = datetime.now()
 
+        lpa_ref_item_exists = False
         for item in retrieved_items:
             if is_lpa_ref_location(item):
-
                 try:
                     new_varFields = change_item_varFields(item, new_lcc_item_field)
+                    lpa_ref_item_exists = True
                 except MultiCallNumError:
                     print(f"MultiCallnumberError: b{sid}a")
                     save2csv(errors_fh, [sid, item["id"]])
@@ -85,14 +79,29 @@ def reclass(src_fh: str) -> None:
                 items_updated.append(item["id"])
 
         # update bib record
-        new_bib_data = {"varFields": bib_new_varFields}
-        # print(new_bib_data)
-        res = update_bib(sid, new_bib_data, conn)
-        print(f"Updating b{sid}a ({row}) result: {res}")
-        save2csv(
-            "src/files/LPALCReclass/LPAReclas-log.csv",
-            [timestamp, sid, lcc, item_update_count, ",".join(items_updated)],
-        )
+        if lpa_ref_item_exists:
+            new_lcc_bib_field = construct_lcc_field(lcc_subfields, fieldTag="q")
+            bib_new_varFields = cleanup_bib_varFields(
+                bib_varFields, callnumbers4del, other_loc_callnumbers
+            )
+            bib_new_varFields.append(new_lcc_bib_field)
+            new_bib_data = {"varFields": bib_new_varFields}
+            # print(new_bib_data)
+            res = update_bib(sid, new_bib_data, conn)
+            print(f"Updating b{sid}a ({row}) result: {res}")
+            end = datetime.now()
+            elapsed = end - timestamp
+            save2csv(
+                "src/files/LPALCReclass/LPAReclas-log.csv",
+                [
+                    timestamp,
+                    sid,
+                    lcc,
+                    item_update_count,
+                    ",".join(items_updated),
+                    elapsed,
+                ],
+            )
         row += 1
 
 
