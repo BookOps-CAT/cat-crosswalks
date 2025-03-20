@@ -7,6 +7,7 @@ from src.lpa_reclass_utils import (
     change_item_varFields,
     construct_item_internal_note,
     construct_subfields_for_lcc,
+    dedup_orphan_callnumbers,
     determine_safe_to_delete_item_callnumbers,
     get_bib_callnumber,
     get_callnumber,
@@ -16,6 +17,8 @@ from src.lpa_reclass_utils import (
     is_callnumber_field,
     is_lpa_ref_location,
     normalize_callnumber,
+    split_into_batches,
+    cleanup_bib_varFields,
 )
 
 
@@ -135,7 +138,7 @@ def test_change_item_varFields_with_multiple_callnumber_fields():
 
 def test_construct_item_internal_note():
     old_callnumber = "FOO"
-    assert construct_item_internal_note(olc_callnumber) == {
+    assert construct_item_internal_note(old_callnumber) == {
         "fieldTag": "x",
         "content": f"Reclassified by CAT/mus, {datetime.now():%Y-%m-%d} (former classmark: {old_callnumber})",
     }
@@ -180,6 +183,11 @@ def construct_lcc_field_exceptions(arg1, arg2):
             True,
             [dict(tag="h", content="ML101.G7"), dict(tag="i", content="S64 1984")],
         ),
+        (
+            "ML1733.8.M5 T45",
+            False,
+            [dict(tag="h", content="ML1733.8"), dict(tag="i", content=".M5 T45")],
+        ),
     ],
 )
 def test_construct_subfields_for_lcc(arg1, arg2, expectation):
@@ -191,8 +199,8 @@ def test_determine_safe_to_delete_item_callnumbers(stub_lpa_item, stub_other_ite
     assert determine_safe_to_delete_item_callnumbers(items) == {"FOO BAR"}
 
 
-def test_get_bibcallnumber(stub_bib_as_json):
-    assert get_bib_callnumber(stub_bib_as_json) == {"FOO BAR SPAM", "BAZ QUX"}
+def test_get_bib_callnumber(stub_bib_as_json):
+    assert get_bib_callnumber(stub_bib_as_json) == {"FOO BAR", "BAZ"}
 
 
 def test_get_item_nos_from_bib_response():
@@ -322,15 +330,118 @@ def test_normalize_callnumer(arg, expectation):
     assert normalize_callnumber(arg) == expectation
 
 
+@pytest.mark.parametrize(
+    "arg1,arg2,expectation",
+    [(["a", "b", "c", "d", "e"], 2, [["a", "b"], ["c", "d"], ["e"]])],
+)
+def test_split_into_batches(arg1, arg2, expectation):
+    assert split_into_batches(arg1, arg2) == expectation
+
+
+@pytest.mark.parametrize(
+    "arg,expectation",
+    [
+        ({"FOO", "BAR", "BAZ"}, {"FOO", "BAR", "BAZ"}),
+        (
+            {"FOO, BAZ", "BAR", "FO.O", "FOO BAZ"},
+            {
+                "FOO, BAZ",
+                "FO.O",
+                "BAR",
+            },
+        ),
+    ],
+)
+def test_dedup_orphan_callnumbers(arg, expectation):
+    assert dedup_orphan_callnumbers(arg) == expectation
+
+
+def test_cleanup_bib_varFields(stub_bib_as_json):
+    varFields = stub_bib_as_json["varFields"]
+    callnumbers4del = {"BAZ"}
+    other_loc_callnumbers = {"FOO BAR"}
+    assert cleanup_bib_varFields(varFields, callnumbers4del, other_loc_callnumbers) == [
+        {
+            "fieldTag": "a",
+            "marcTag": "100",
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [
+                {"tag": "a", "content": "Wojciechowska, Maia,"},
+                {"tag": "d", "content": "1927-"},
+            ],
+        },
+        {
+            "fieldTag": "b",
+            "marcTag": "700",
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [{"tag": "a", "content": "Sandin, Joan."}],
+        },
+        {
+            "fieldTag": "d",
+            "marcTag": "650",
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+                {"tag": "a", "content": "Families"},
+                {"tag": "v", "content": "Fiction."},
+            ],
+        },
+        {"fieldTag": "o", "marcTag": "001", "ind1": " ", "ind2": " ", "content": "170"},
+        {
+            "fieldTag": "p",
+            "marcTag": "260",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {"tag": "a", "content": "New York,"},
+                {"tag": "b", "content": "Harper & Row"},
+                {"tag": "c", "content": "[1969]"},
+            ],
+        },
+        {
+            "fieldTag": "t",
+            "marcTag": "245",
+            "ind1": "1",
+            "ind2": "0",
+            "subfields": [
+                {"tag": "a", "content": "Hey, what's wrong with this one?"},
+                {"tag": "c", "content": "Pictures by Joan Sandin."},
+            ],
+        },
+        {
+            "fieldTag": "c",
+            "marcTag": "852",
+            "ind1": "8",
+            "ind2": " ",
+            "subfields": [
+                {"tag": "h", "content": "FOO, BAR"},
+                {"tag": "m", "content": "SPAM"},
+            ],
+        },
+        {
+            "fieldTag": "y",
+            "marcTag": "008",
+            "ind1": " ",
+            "ind2": " ",
+            "content": "690505s1969    nyua   j      000 1 eng  cam   ",
+        },
+        {"fieldTag": "_", "content": "00000cam  2200000   4500"},
+        {
+            "fieldTag": "l",
+            "marcTag": "947",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [{"tag": "a", "content": "BAZ."}],
+        },
+    ]
+
+
 # def test_temp():
 #     from src.lpa_reclass_utils import connect2sierra, get_items
 
-#     sid = "32153977"
+#     sid = "10354277"
 #     conn = connect2sierra()
 #     res = get_items(sid, conn)
 #     print(res)
-
-
-def test_construct_item_internal_note():
-    # print(construct_item_internal_note("Foo"))
-    pass

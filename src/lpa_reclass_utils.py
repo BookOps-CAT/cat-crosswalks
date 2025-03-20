@@ -12,6 +12,9 @@ class MultiCallNumError(Exception):
     pass
 
 
+LCC_PATTERN = re.compile(r"(^.*\.\d{1,})(\..*)")
+
+
 # SOURCE DATA
 def get_reclass_data(fh: str) -> Generator[tuple[str, bool, str], None, None]:
     with open(fh, "r") as csvfile:
@@ -35,7 +38,7 @@ def has_special_cutter(value: str) -> bool:
 
 
 def connect2sierra():
-    fh = os.path.join(os.environ["USERPROFILE"], ".cred/.sierra/sierra-prod-lpa.json")
+    fh = os.path.join(os.environ["USERPROFILE"], ".cred/.sierra/sierra-dev.json")
     with open(fh, "r") as file:
         cred = json.load(file)
     token = SierraToken(
@@ -140,8 +143,13 @@ def construct_subfields_for_lcc(value: str, special_cutter: bool) -> list[dict]:
         subfield_i = value[value.index(" ") :].strip()
     else:
         try:
-            subfield_h = value[: value.index(".")].strip()
-            subfield_i = value[value.index(".") :].strip()
+            match = re.match(LCC_PATTERN, value)
+            if match:
+                subfield_h = match.group(1).strip()
+                subfield_i = match.group(2).strip()
+            else:
+                subfield_h = value[: value.index(".")].strip()
+                subfield_i = value[value.index(".") :].strip()
         except ValueError:
             subfield_h = value[: value.index(" ")].strip()
             subfield_i = value[value.index(" ") :].strip()
@@ -207,7 +215,8 @@ def get_callnumber(var_field: dict) -> str:
     elements = []
     try:
         for subfield in var_field["subfields"]:
-            elements.append(subfield["content"].strip())
+            if subfield["tag"] not in ("m", "z"):
+                elements.append(subfield["content"].strip())
     except KeyError:
         pass
     return " ".join(elements)
@@ -251,7 +260,11 @@ def dedup_orphan_callnumbers(callnumbers: set[str]) -> set[str]:
     return deduped_callnumbers
 
 
-def update_bib_varFields(
+def split_into_batches(lst: list[str], batch_size=5) -> list[list[str]]:
+    return [lst[i : i + batch_size] for i in range(0, len(lst), batch_size)]
+
+
+def cleanup_bib_varFields(
     varFields: list[dict], callnumbers4del: set[str], other_loc_callnumbers: set[str]
 ) -> list[dict]:
     new_varFields = []
