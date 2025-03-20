@@ -35,7 +35,7 @@ def has_special_cutter(value: str) -> bool:
 
 
 def connect2sierra():
-    fh = os.path.join(os.environ["USERPROFILE"], ".cred/.sierra/sierra-dev.json")
+    fh = os.path.join(os.environ["USERPROFILE"], ".cred/.sierra/sierra-prod-lpa.json")
     with open(fh, "r") as file:
         cred = json.load(file)
     token = SierraToken(
