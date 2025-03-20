@@ -186,8 +186,9 @@ def test_construct_subfields_for_lcc(arg1, arg2, expectation):
     assert construct_subfields_for_lcc(arg1, arg2) == expectation
 
 
-def test_determine_safe_to_detete_item_callnumbers():
-    pass
+def test_determine_safe_to_delete_item_callnumbers(stub_lpa_item, stub_other_item):
+    items = [stub_lpa_item, stub_other_item]
+    assert determine_safe_to_delete_item_callnumbers(items) == {"FOO BAR"}
 
 
 def test_get_bibcallnumber(stub_bib_as_json):
@@ -200,34 +201,13 @@ def test_get_item_nos_from_bib_response():
     ) == ["14381985"]
 
 
-def test_get_other_item_callnumbers_not_present(stub_item):
-    items = [stub_item]
-    assert get_other_item_callnumbers(items) == {""}
+def test_get_other_item_callnumbers_not_present(stub_lpa_item):
+    items = [stub_lpa_item]
+    assert get_other_item_callnumbers(items) == set()
 
 
-def test_get_other_item_callnumbers_present(stub_item):
-    second_item = stub_item.copy()
-    second_item["barcode"] = ("33433064168457",)
-    second_item["location"] = {"code": "rcmb8", "name": "OFF SITE"}
-    second_item["fixedFields"] = [
-        {
-            "label": "LOCATION",
-            "number": 79,
-            "value": "rcmb8",
-            "display": "OFF SITE",
-        },
-    ]
-    second_item["varFields"] = [
-        {"fieldTag": "b", "content": "33433064168457"},
-        {
-            "fieldTag": "c",
-            "marcTag": "852",
-            "ind1": "8",
-            "ind2": " ",
-            "content": [{"tag": "h", "content": "BAZ"}],
-        },
-    ]
-    items = [stub_item, second_item]
+def test_get_other_item_callnumbers_present(stub_lpa_item, stub_other_item):
+    items = [stub_lpa_item, stub_other_item]
     assert get_other_item_callnumbers(items) == {"BAZ"}
 
 
@@ -348,7 +328,7 @@ def test_normalize_callnumer(arg, expectation):
 #     sid = "32153977"
 #     conn = connect2sierra()
 #     res = get_items(sid, conn)
-# print(res)
+#     print(res)
 
 
 def test_construct_item_internal_note():

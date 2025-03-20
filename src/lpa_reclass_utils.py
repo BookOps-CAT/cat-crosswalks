@@ -183,8 +183,10 @@ def get_other_item_callnumbers(items: list[dict]) -> set[str]:
                 if is_callnumber_field(f):
                     callnumber = get_callnumber(f)
                     norm_callnumber = normalize_callnumber(callnumber)
+                    # print(f"Norm callnumber: {norm_callnumber}")
                     callnumbers.add(norm_callnumber)
     return callnumbers
+
 
 def get_ref_item_callnumbers(items: list[dict]) -> set[str]:
     callnumbers = set()
@@ -199,6 +201,9 @@ def get_ref_item_callnumbers(items: list[dict]) -> set[str]:
 
 
 def get_callnumber(var_field: dict) -> str:
+    """
+    Takes all subfields and combines them into a string (including $m & $z)
+    """
     elements = []
     try:
         for subfield in var_field["subfields"]:
