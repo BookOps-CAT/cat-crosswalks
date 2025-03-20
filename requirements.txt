@@ -69,7 +69,6 @@ pycparser==2.22
 Pygments==2.19.1
 pymarc==5.2.3
 pytest==8.3.4
-pytest-lazy-fixture==0.6.3
 python-dateutil==2.9.0.post0
 python-json-logger==3.2.1
 pytz==2024.2
