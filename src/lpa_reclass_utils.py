@@ -50,7 +50,7 @@ def connect2sierra():
         host_url=cred["host_url"],
         agent="BOOKOPS/TESTS",
     )
-    with SierraSession(authorization=token, timeout=10) as session:
+    with SierraSession(authorization=token, timeout=15) as session:
         return session
 
 
