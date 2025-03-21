@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
 import json
+import logging
 import os
 import re
 from typing import Union, Generator
@@ -11,6 +12,8 @@ from bookops_sierra import SierraSession, SierraToken
 class MultiCallNumError(Exception):
     pass
 
+
+mlogger = logging.getLogger("lc_reclass.utils")
 
 LCC_PATTERN = re.compile(r"(^.*\.\d{1,})(\..*)")
 
@@ -53,7 +56,6 @@ def connect2sierra():
 
 def get_bib(sid: Union[str, int], conn: SierraSession) -> dict:
     res = conn.bib_get(sid, fields="varFields,items")
-    # print(f"Server response code: {res.status_code}")
     return res.json()
 
 
@@ -63,14 +65,12 @@ def get_item_nos_from_bib_response(urls: list[str]) -> list[str]:
 
 def get_items(sids: str, conn: SierraSession) -> list[dict]:
     res = conn.items_get(sids=sids, fields="location,varFields")
-    print(f"Item request: {res.url}")
     items = res.json()["entries"]
     return items
 
 
 def update_bib(sid: Union[str, int], data: dict, conn: SierraSession) -> int:
     out = conn.bib_update(sid=sid, data=data, data_format="application/json")
-    # print(f"Update response code: {out.status_code}")
     return out.status_code
 
 
@@ -160,10 +160,10 @@ def construct_subfields_for_lcc(value: str, special_cutter: bool) -> list[dict]:
 def determine_safe_to_delete_item_callnumbers(items: list[dict]) -> set[str]:
     # callnumber belonging to other locations
     other_callnumbers = get_other_item_callnumbers(items)
-    print(f"Other callnumbers: {other_callnumbers}")
+    mlogger.debug(f"Other callnumbers: {other_callnumbers}")
     # callnumber unique to pam11 & pah11
     ref_callnumbers = get_ref_item_callnumbers(items)
-    print(f"REF callnumbers: {ref_callnumbers}")
+    mlogger.debug(f"REF callnumbers: {ref_callnumbers}")
 
     callnumbers4del = set()
     for callnumber in ref_callnumbers:
@@ -191,7 +191,7 @@ def get_other_item_callnumbers(items: list[dict]) -> set[str]:
                 if is_callnumber_field(f):
                     callnumber = get_callnumber(f)
                     norm_callnumber = normalize_callnumber(callnumber)
-                    # print(f"Norm callnumber: {norm_callnumber}")
+                    mlogger.debug(f"Norm callnumber: {norm_callnumber}")
                     callnumbers.add(norm_callnumber)
     return callnumbers
 
@@ -268,21 +268,23 @@ def cleanup_bib_varFields(
     varFields: list[dict], callnumbers4del: set[str], other_loc_callnumbers: set[str]
 ) -> list[dict]:
     new_varFields = []
-    orphan_callnumbers = set()
+    orphan_callnumbers = set()  # not normalized
     for f in varFields:
         if is_callnumber_field(f):
-            callnumber = get_callnumber(f)
+            callnumber = get_callnumber(f)  # ignores $m & $z
             norm_callnumber = normalize_callnumber(callnumber)
             if norm_callnumber and norm_callnumber in callnumbers4del:
                 orphan_callnumbers.add(callnumber)
-            elif norm_callnumber not in other_loc_callnumbers:
-                orphan_callnumbers.add(callnumber)
+            # elif norm_callnumber not in other_loc_callnumbers:
+            #     orphan_callnumbers.add(callnumber)
             else:
                 new_varFields.append(f)
         else:
             new_varFields.append(f)
-    print(f"Orphan callnumbers: {orphan_callnumbers}")
-    deduped_orphan_callnumbers = dedup_orphan_callnumbers(orphan_callnumbers)
+    mlogger.debug(f"Orphan callnumbers: {orphan_callnumbers}")
+    deduped_orphan_callnumbers = dedup_orphan_callnumbers(
+        orphan_callnumbers
+    )  # using normalization
     for callnumber in deduped_orphan_callnumbers:
         new_947_field = construct_947_field(callnumber)
         new_varFields.append(new_947_field)
