@@ -9,7 +9,7 @@ babel==2.16.0
 beautifulsoup4==4.12.3
 bleach==6.2.0
 bookops-marc @ git+http://github.com/BookOps-CAT/bookops-marc@34e74cdb8ff6f8f0fe925b68a31c86413c04742c
-bookops-sierra @ git+https://github.com/BookOps-CAT/bookops-sierra@d6d696fa7cab972a63217a196fe82c587fb2b942
+bookops-sierra @ git+https://github.com/BookOps-CAT/bookops-sierra@4eb3f1db708e26a245e930a39253bb95e5802111
 bookops-worldcat==1.1.0
 certifi==2024.12.14
 cffi==1.17.1
