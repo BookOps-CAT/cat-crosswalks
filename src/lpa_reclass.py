@@ -16,6 +16,7 @@ from lpa_reclass_utils import (
     get_item_nos_from_bib_response,
     get_items,
     is_lpa_ref_location,
+    item_is_updated,
     split_into_batches,
     cleanup_bib_varFields,
     update_bib,
@@ -85,7 +86,7 @@ def reclass(src_fh: str) -> None:
 
         lpa_ref_item_exists = False
         for item in retrieved_items:
-            if is_lpa_ref_location(item):
+            if is_lpa_ref_location(item) and not item_is_updated(item):
                 try:
                     new_varFields = change_item_varFields(item, new_lcc_item_field)
                     lpa_ref_item_exists = True
@@ -95,10 +96,15 @@ def reclass(src_fh: str) -> None:
                     continue
 
                 new_item_data = {"varFields": new_varFields}
-                res = conn.item_update(sid=item["id"], data=new_item_data)
-                logger.debug(f"Update item request:{res.url}")
-                item_update_count += 1
-                items_updated.append(item["id"])
+                try:
+                    res = conn.item_update(sid=item["id"], data=new_item_data)
+                    logger.debug(f"Update item request:{res.url}")
+                    item_update_count += 1
+                    items_updated.append(item["id"])
+                except BookopsSierraError:
+                    logger.error(f"BookopsSierraError: b{sid}a | {item["id"]}. Verify.")
+                    save2csv(errors_fh, [sid, item["id"]])
+                    raise
 
         # update bib record
         if lpa_ref_item_exists:
@@ -128,5 +134,5 @@ def reclass(src_fh: str) -> None:
 
 
 if __name__ == "__main__":
-    reclass("src/files/LPALCReclass/LPAOpenShelfRef-TEST.csv")
-    # reclass("src/files/LPALCReclass/LPAOpenShelfRef.csv")
+    # reclass("src/files/LPALCReclass/LPAOpenShelfRef-TEST.csv")
+    reclass("src/files/LPALCReclass/LPAOpenShelfRef.csv")

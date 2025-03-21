@@ -41,7 +41,7 @@ def has_special_cutter(value: str) -> bool:
 
 
 def connect2sierra():
-    fh = os.path.join(os.environ["USERPROFILE"], ".cred/.sierra/sierra-dev.json")
+    fh = os.path.join(os.environ["USERPROFILE"], ".cred/.sierra/sierra-prod-lpa.json")
     with open(fh, "r") as file:
         cred = json.load(file)
     token = SierraToken(
@@ -240,6 +240,16 @@ def is_lpa_ref_location(item: dict) -> bool:
             return False
     except KeyError:
         return False
+
+
+def item_is_updated(item: dict) -> bool:
+    for field in item["varFields"]:
+        try:
+            if field["marcTag"] == "852" and field["ind1"] == "0":
+                return True
+        except KeyError:
+            continue
+    return False
 
 
 def normalize_callnumber(value: str) -> str:

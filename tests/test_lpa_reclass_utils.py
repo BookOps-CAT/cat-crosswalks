@@ -16,6 +16,7 @@ from src.lpa_reclass_utils import (
     has_special_cutter,
     is_callnumber_field,
     is_lpa_ref_location,
+    item_is_updated,
     normalize_callnumber,
     split_into_batches,
     cleanup_bib_varFields,
@@ -317,6 +318,15 @@ def test_is_callnumber_field(arg, expectation):
 def test_is_lpa_ref_location(request, fixture_name, expectation):
     arg = request.getfixturevalue(fixture_name)
     assert is_lpa_ref_location(arg) == expectation
+
+
+@pytest.mark.parametrize(
+    "fixture_name,expectation",
+    [("stub_lpa_item", False), ("stub_lpa_item_updated", True)],
+)
+def test_item_is_updated(request, fixture_name, expectation):
+    arg = request.getfixturevalue(fixture_name)
+    assert item_is_updated(arg) == expectation
 
 
 @pytest.mark.parametrize(
