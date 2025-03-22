@@ -1,12 +1,7 @@
-import csv
 from datetime import datetime
-import json
 import logging
-import os
 import re
-from typing import Union, Generator
-
-from bookops_sierra import SierraSession, SierraToken
+from typing import Union
 
 
 class MultiCallNumError(Exception):
@@ -16,63 +11,6 @@ class MultiCallNumError(Exception):
 mlogger = logging.getLogger("lc_reclass.utils")
 
 LCC_PATTERN = re.compile(r"(^.*\.\d{1,})(\..*)")
-
-
-# SOURCE DATA
-def get_reclass_data(fh: str) -> Generator[tuple[str, bool, str], None, None]:
-    with open(fh, "r") as csvfile:
-        reader = csv.reader(csvfile)
-        next(reader)
-        for row in reader:
-            bibNo = row[1].strip()[1:-1]
-            spec_cutter = has_special_cutter(row[2])
-            lcc = row[3].strip()
-            yield (bibNo, spec_cutter, lcc)
-
-
-def has_special_cutter(value: str) -> bool:
-    if "YES" in value.upper():
-        return True
-    else:
-        return False
-
-
-# SIERRA API methods
-
-
-def connect2sierra():
-    fh = os.path.join(os.environ["USERPROFILE"], ".cred/.sierra/sierra-dev.json")
-    with open(fh, "r") as file:
-        cred = json.load(file)
-    token = SierraToken(
-        client_id=cred["client_id"],
-        client_secret=cred["client_secret"],
-        host_url=cred["host_url"],
-        agent="BOOKOPS/TESTS",
-    )
-    with SierraSession(authorization=token, timeout=15) as session:
-        return session
-
-
-def get_bib(sid: Union[str, int], conn: SierraSession) -> dict:
-    res = conn.bib_get(sid, fields="varFields,items")
-    return res.json()
-
-
-def get_item_nos_from_bib_response(urls: list[str]) -> list[str]:
-    return [u.rsplit("/", 1)[-1] for u in urls]
-
-
-def get_items(sids: str, conn: SierraSession) -> list[dict]:
-    res = conn.items_get(sids=sids, fields="location,varFields")
-    items = res.json()["entries"]
-    return items
-
-
-def update_bib(sid: Union[str, int], data: dict, conn: SierraSession) -> int:
-    out = conn.bib_update(sid=sid, data=data, data_format="application/json")
-    return out.status_code
-
 
 # MARC MANIPULATION
 
@@ -106,6 +44,44 @@ def change_item_varFields(item: dict, callnumber_field: dict) -> list[dict]:
     return new_varFields
 
 
+def cleanup_bib_varFields(
+    varFields: list[dict], callnumbers4del: set[str], other_loc_callnumbers: set[str]
+) -> list[dict]:
+    new_varFields = []
+    orphan_callnumbers = set()  # not normalized
+    for f in varFields:
+        if is_callnumber_field(f):
+            callnumber = get_callnumber(f)  # ignores $m & $z
+            norm_callnumber = normalize_callnumber(callnumber)
+            if norm_callnumber and norm_callnumber in callnumbers4del:
+                orphan_callnumbers.add(callnumber)
+            # elif norm_callnumber not in other_loc_callnumbers:
+            #     orphan_callnumbers.add(callnumber)
+            else:
+                new_varFields.append(f)
+        else:
+            new_varFields.append(f)
+    mlogger.debug(f"Orphan callnumbers: {orphan_callnumbers}")
+    deduped_orphan_callnumbers = dedup_orphan_callnumbers(
+        orphan_callnumbers
+    )  # using normalization
+    for callnumber in deduped_orphan_callnumbers:
+        new_947_field = construct_947_field(callnumber)
+        new_varFields.append(new_947_field)
+
+    return new_varFields
+
+
+def construct_947_field(value: str) -> dict[str, Union[str, list]]:
+    return {
+        "fieldTag": "l",
+        "marcTag": "947",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [{"tag": "a", "content": value}],
+    }
+
+
 def construct_item_internal_note(value: str):
     return {
         "fieldTag": "x",
@@ -124,16 +100,6 @@ def construct_lcc_field(subfields: list[dict], fieldTag: str) -> dict:
         "ind1": "0",
         "ind2": "1",
         "subfields": subfields,
-    }
-
-
-def construct_947_field(value: str) -> dict[str, Union[str, list]]:
-    return {
-        "fieldTag": "l",
-        "marcTag": "947",
-        "ind1": " ",
-        "ind2": " ",
-        "subfields": [{"tag": "a", "content": value}],
     }
 
 
@@ -158,6 +124,9 @@ def construct_subfields_for_lcc(value: str, special_cutter: bool) -> list[dict]:
 
 
 def determine_safe_to_delete_item_callnumbers(items: list[dict]) -> set[str]:
+    """
+    Considers only call numbers on item records
+    """
     # callnumber belonging to other locations
     other_callnumbers = get_other_item_callnumbers(items)
     mlogger.debug(f"Other callnumbers: {other_callnumbers}")
@@ -181,6 +150,20 @@ def get_bib_callnumber(bib: dict) -> set[str]:
             norm_callnumber = normalize_callnumber(callnumber)
             callnumbers.add(norm_callnumber)
     return callnumbers
+
+
+def get_callnumber(var_field: dict) -> str:
+    """
+    Takes all subfields and combines them into a string (including $m & $z)
+    """
+    elements = []
+    try:
+        for subfield in var_field["subfields"]:
+            if subfield["tag"] not in ("m", "z"):
+                elements.append(subfield["content"].strip())
+    except KeyError:
+        pass
+    return " ".join(elements)
 
 
 def get_other_item_callnumbers(items: list[dict]) -> set[str]:
@@ -208,18 +191,8 @@ def get_ref_item_callnumbers(items: list[dict]) -> set[str]:
     return callnumbers
 
 
-def get_callnumber(var_field: dict) -> str:
-    """
-    Takes all subfields and combines them into a string (including $m & $z)
-    """
-    elements = []
-    try:
-        for subfield in var_field["subfields"]:
-            if subfield["tag"] not in ("m", "z"):
-                elements.append(subfield["content"].strip())
-    except KeyError:
-        pass
-    return " ".join(elements)
+def get_item_nos_from_bib_response(urls: list[str]) -> list[str]:
+    return [u.rsplit("/", 1)[-1] for u in urls]
 
 
 def is_callnumber_field(field: dict) -> bool:
@@ -262,31 +235,3 @@ def dedup_orphan_callnumbers(callnumbers: set[str]) -> set[str]:
 
 def split_into_batches(lst: list[str], batch_size=5) -> list[list[str]]:
     return [lst[i : i + batch_size] for i in range(0, len(lst), batch_size)]
-
-
-def cleanup_bib_varFields(
-    varFields: list[dict], callnumbers4del: set[str], other_loc_callnumbers: set[str]
-) -> list[dict]:
-    new_varFields = []
-    orphan_callnumbers = set()  # not normalized
-    for f in varFields:
-        if is_callnumber_field(f):
-            callnumber = get_callnumber(f)  # ignores $m & $z
-            norm_callnumber = normalize_callnumber(callnumber)
-            if norm_callnumber and norm_callnumber in callnumbers4del:
-                orphan_callnumbers.add(callnumber)
-            # elif norm_callnumber not in other_loc_callnumbers:
-            #     orphan_callnumbers.add(callnumber)
-            else:
-                new_varFields.append(f)
-        else:
-            new_varFields.append(f)
-    mlogger.debug(f"Orphan callnumbers: {orphan_callnumbers}")
-    deduped_orphan_callnumbers = dedup_orphan_callnumbers(
-        orphan_callnumbers
-    )  # using normalization
-    for callnumber in deduped_orphan_callnumbers:
-        new_947_field = construct_947_field(callnumber)
-        new_varFields.append(new_947_field)
-
-    return new_varFields
