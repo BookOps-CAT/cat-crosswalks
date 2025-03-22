@@ -173,6 +173,34 @@ def stub_lpa_item():
 
 
 @pytest.fixture
+def stub_lpa_item_updated():
+    return {
+        "id": "3159578",
+        "callNumber": "FOO.BAR",
+        "barcode": "33433030947877",
+        "location": {"code": "pam11", "name": "LPA REF"},
+        "fixedFields": [
+            {
+                "label": "LOCATION",
+                "number": 79,
+                "value": "pam11",
+                "display": "Performing Arts Research Collections - Music - Reference",
+            },
+        ],
+        "varFields": [
+            {"fieldTag": "b", "content": "33433030947877"},
+            {
+                "fieldTag": "c",
+                "marcTag": "852",
+                "ind1": "0",
+                "ind2": "1",
+                "subfields": [{"tag": "h", "content": "FOO.BAR"}],
+            },
+        ],
+    }
+
+
+@pytest.fixture
 def stub_other_item():
     return {
         "id": "3159579",

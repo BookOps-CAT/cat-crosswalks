@@ -215,6 +215,16 @@ def is_lpa_ref_location(item: dict) -> bool:
         return False
 
 
+def item_is_updated(item: dict) -> bool:
+    for field in item["varFields"]:
+        try:
+            if field["marcTag"] == "852" and field["ind1"] == "0":
+                return True
+        except KeyError:
+            continue
+    return False
+
+
 def normalize_callnumber(value: str) -> str:
     norm_value = re.sub(r'\.|,|\(|\)|"|-', "", value).strip()
     return norm_value
