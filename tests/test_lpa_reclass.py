@@ -189,6 +189,7 @@ def construct_lcc_field_exceptions(arg1, arg2):
             False,
             [dict(tag="h", content="ML1733.8"), dict(tag="i", content=".M5 T45")],
         ),
+        ("ML160", False, [dict(tag="h", content="ML160")]),
     ],
 )
 def test_construct_subfields_for_lcc(arg1, arg2, expectation):
@@ -440,9 +441,13 @@ def test_cleanup_bib_varFields(stub_bib_as_json):
 
 
 # def test_temp():
-#     from src.lpa_reclass_utils import connect2sierra, get_items
+#     from src.lpa_reclass import get_bib, get_access_token
+#     from bookops_sierra import SierraSession
 
-#     sid = "10354277"
-#     conn = connect2sierra()
-#     res = get_items(sid, conn)
-#     print(res)
+#     sid = "11831742"
+#     token = get_access_token()
+#     with SierraSession(authorization=token) as conn:
+#         res = get_bib(sid, conn)
+#         print(len(res["items"]))
+
+#         res = get_items(sid,)

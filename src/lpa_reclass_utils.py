@@ -108,17 +108,20 @@ def construct_subfields_for_lcc(value: str, special_cutter: bool) -> list[dict]:
         subfield_h = value[: value.index(" ")].strip()
         subfield_i = value[value.index(" ") :].strip()
     else:
-        try:
-            match = re.match(LCC_PATTERN, value)
-            if match:
-                subfield_h = match.group(1).strip()
-                subfield_i = match.group(2).strip()
-            else:
+        match = re.match(LCC_PATTERN, value)
+        if match:
+            subfield_h = match.group(1).strip()
+            subfield_i = match.group(2).strip()
+        else:
+            try:
                 subfield_h = value[: value.index(".")].strip()
                 subfield_i = value[value.index(".") :].strip()
-        except ValueError:
-            subfield_h = value[: value.index(" ")].strip()
-            subfield_i = value[value.index(" ") :].strip()
+            except ValueError:
+                try:
+                    subfield_h = value[: value.index(" ")].strip()
+                    subfield_i = value[value.index(" ") :].strip()
+                except ValueError:
+                    return [{"tag": "h", "content": value.strip()}]
 
     return [{"tag": "h", "content": subfield_h}, {"tag": "i", "content": subfield_i}]
 
