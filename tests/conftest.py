@@ -58,6 +58,26 @@ def stub_bib_as_json():
         ],
         "varFields": [
             {
+                "fieldTag": "y",
+                "marcTag": "050",
+                "ind1": " ",
+                "ind2": "4",
+                "subfields": [
+                    {"tag": "a", "content": "FOO"},
+                    {"tag": "b", "content": "BAR"},
+                ],
+            },
+            {
+                "fieldTag": "y",
+                "marcTag": "050",
+                "ind1": "0",
+                "ind2": "0",
+                "subfields": [
+                    {"tag": "a", "content": "BAZ"},
+                    {"tag": "b", "content": "QUX"},
+                ],
+            },
+            {
                 "fieldTag": "a",
                 "marcTag": "100",
                 "ind1": "1",
@@ -195,6 +215,28 @@ def stub_other_item():
                 "ind1": "8",
                 "ind2": " ",
                 "subfields": [{"tag": "h", "content": "BAZ"}],
+            },
+        ],
+    }
+
+
+@pytest.fixture
+def stub_loa_item():
+    return {
+        "id": "24037848",
+        "location": {"code": "mall1", "name": "SASB - General Research - Room 315"},
+        "varFields": [
+            {"fieldTag": "b", "content": "33433076756471"},
+            {
+                "fieldTag": "c",
+                "marcTag": "852",
+                "ind1": "0",
+                "ind2": "1",
+                "subfields": [
+                    {"tag": "k", "content": "*R-RMRR"},
+                    {"tag": "h", "content": "PS221"},
+                    {"tag": "i", "content": ".A4"},
+                ],
             },
         ],
     }
